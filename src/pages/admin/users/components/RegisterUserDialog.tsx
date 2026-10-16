@@ -122,7 +122,7 @@ export function RegisterUserDialog({ open, onOpenChange, companies, onSubmit }: 
               <option value="">Select a company...</option>
               {activeCompanies.map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.name}
+                  {c.country ? `${c.name} (${c.country})` : c.name}
                 </option>
               ))}
             </select>

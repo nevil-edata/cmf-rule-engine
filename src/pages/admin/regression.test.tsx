@@ -646,8 +646,8 @@ describe('M3-3.E.2 - Admin regression scenarios', () => {
         />
       );
 
-      expect(screen.getByText('Active Corp')).toBeDefined();
-      expect(screen.queryByText('Inactive Corp')).toBeNull();
+      expect(screen.getByText(/^Active Corp/)).toBeDefined();
+      expect(screen.queryByText(/^Inactive Corp/)).toBeNull();
     });
 
     it('shows validation error when company is not selected', async () => {

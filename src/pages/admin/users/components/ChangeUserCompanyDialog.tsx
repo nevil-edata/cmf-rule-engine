@@ -60,7 +60,7 @@ export function ChangeUserCompanyDialog({ user, companies, onOpenChange, onSubmi
               onChange={(event) => setCompanyId(event.target.value)}
               options={[
                 { value: '', label: 'Select a company...' },
-                ...companies.filter((company) => company.isActive).map((company) => ({ value: company.id, label: company.name })),
+                ...companies.filter((company) => company.isActive).map((company) => ({ value: company.id, label: company.country ? `${company.name} (${company.country})` : company.name })),
               ]}
             />
           </div>

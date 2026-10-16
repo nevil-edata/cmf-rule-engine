@@ -30,13 +30,13 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
   const { user } = useAuth();
   const [file, setFile] = useState<File | null>(null);
   const [nickname, setNickname] = useState('');
-  const [insuranceCompany, setInsuranceCompany] = useState('');
+  const [companyId, setCompanyId] = useState('');
   const [country, setCountry] = useState('');
   const [claimCategory, setClaimCategory] = useState<ClaimCategory>('motor');
   const [granularity, setGranularity] = useState<DatasetGranularity>('claim');
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>('idle');
   const [error, setError] = useState<string | null>(null);
-  const [companies, setCompanies] = useState<Array<{ id: string; name: string }>>([]);
+  const [companies, setCompanies] = useState<Array<{ id: string; name: string; country?: string | null }>>([]);
   const [loadingCompanies, setLoadingCompanies] = useState(false);
   const [companiesError, setCompaniesError] = useState<string | null>(null);
 
@@ -52,7 +52,7 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
     try {
       const { data, error } = await supabase
         .from('companies')
-        .select('id, name, is_active')
+        .select('id, name, country, is_active')
         .eq('is_active', true)
         .order('name');
 
@@ -60,7 +60,7 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
         throw error;
       }
 
-      setCompanies(data?.map(c => ({ id: c.id, name: c.name })) ?? []);
+      setCompanies(data?.map(c => ({ id: c.id, name: c.name, country: c.country })) ?? []);
     } catch (err) {
       console.error('Failed to fetch companies:', err);
       setCompaniesError('Failed to load companies. Please try again.');
@@ -84,8 +84,10 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
     },
   });
 
+  const selectedCompany = companies.find((c) => c.id === companyId);
+
   const handleUpload = async () => {
-    if (!file || !insuranceCompany || !country || !user) {
+    if (!file || !selectedCompany || !country || !user) {
       setError('Please fill in all required fields');
       return;
     }
@@ -105,7 +107,9 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
       // Create FormData
       const formData = new FormData();
       formData.append('Claims_Data', file);
-      formData.append('Insurance Company Name', insuranceCompany);
+      formData.append('Insurance Company Name', selectedCompany.name);
+      // Admins have no company of their own, so the upload function needs to be told which one
+      formData.append('Company Id', selectedCompany.id);
       formData.append('Country', country);
       formData.append('Email', user.email || '');
       formData.append('Claim Category', claimCategory);
@@ -140,7 +144,7 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
         // Reset form
         setFile(null);
         setNickname('');
-        setInsuranceCompany('');
+        setCompanyId('');
         setCountry('');
         setClaimCategory('motor');
         setGranularity('claim');
@@ -313,13 +317,13 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
               ) : (
                 <Select
                   id="insurance-company"
-                  value={insuranceCompany}
-                  onChange={(e) => setInsuranceCompany(e.target.value)}
+                  value={companyId}
+                  onChange={(e) => setCompanyId(e.target.value)}
                   options={[
                     { value: '', label: '(Select a company)' },
                     ...companies.map(c => ({
-                      value: c.name,
-                      label: c.name
+                      value: c.id,
+                      label: c.country ? `${c.name} (${c.country})` : c.name
                     }))
                   ]}
                   className="h-8 bg-card border-border text-sm mt-1"
@@ -372,7 +376,7 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
           </Button>
           <Button
             onClick={handleUpload}
-            disabled={!file || !insuranceCompany || !country || uploadStatus !== 'idle'}
+            disabled={!file || !companyId || !country || uploadStatus !== 'idle'}
             className="h-9"
           >
             {uploadStatus === 'uploading' && (

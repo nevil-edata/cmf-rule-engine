@@ -143,4 +143,23 @@ describe('UploadModal', () => {
       expect(screen.getByText(/failed to load companies/i)).toBeDefined();
     });
   });
+
+  it('tells same-named companies apart by country and sends the company id as the option value', async () => {
+    const twins = [
+      { id: 'gig-eg', name: 'GIG', country: 'Egypt', is_active: true },
+      { id: 'gig-sa', name: 'GIG', country: 'Saudi', is_active: true },
+    ];
+    mockSupabaseFrom.mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      order: vi.fn().mockResolvedValue({ data: twins, error: null }),
+    });
+
+    render(<UploadModal open={true} onClose={vi.fn()} onSuccess={vi.fn()} />);
+
+    const egypt = await screen.findByRole('option', { name: 'GIG (Egypt)' });
+    const saudi = await screen.findByRole('option', { name: 'GIG (Saudi)' });
+    expect((egypt as HTMLOptionElement).value).toBe('gig-eg');
+    expect((saudi as HTMLOptionElement).value).toBe('gig-sa');
+  });
 });

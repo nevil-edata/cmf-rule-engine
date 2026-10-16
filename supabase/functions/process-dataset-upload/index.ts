@@ -43,8 +43,10 @@ function handleCors(req: Request): Response | null {
   return null;
 }
 
-// Validate request and return authenticated user + company context
-async function validateRequest(req: Request) {
+// Validate request and return authenticated user + company context.
+// Company users upload into their own company. Admins have no company of their own, so they
+// name the target company in the form field "Company Id" (checked against the companies table).
+async function validateRequest(req: Request, formCompanyId: string | null) {
   const authHeader = req.headers.get("Authorization");
   if (!authHeader) {
     throw new Error("No authorization header");
@@ -70,7 +72,7 @@ async function validateRequest(req: Request) {
 
   const { data: profile, error: profileError } = await supabase
     .from("user_profiles")
-    .select("company_id, is_active")
+    .select("company_id, is_active, role")
     .eq("user_id", user.id)
     .single();
 
@@ -80,6 +82,22 @@ async function validateRequest(req: Request) {
 
   if (!profile.is_active) {
     throw new Error("User account is deactivated");
+  }
+
+  if (profile.role === "admin") {
+    if (!formCompanyId) {
+      throw new Error("Missing required fields: Company Id (admins must choose the company)");
+    }
+    const { data: company, error: companyError } = await supabase
+      .from("companies")
+      .select("id")
+      .eq("id", formCompanyId)
+      .eq("is_active", true)
+      .maybeSingle();
+    if (companyError || !company) {
+      throw new Error("Selected company was not found or is inactive");
+    }
+    return { user, authHeader, companyId: company.id as string };
   }
 
   if (!profile.company_id) {
@@ -323,11 +341,16 @@ Deno.serve(async (req: Request) => {
   if (corsResponse) return corsResponse;
 
   try {
-    // Validate request and authenticate user
-    const { user, authHeader, companyId } = await validateRequest(req);
-
-    // Parse and validate form data
+    // Parse the form first: an admin's target company comes from it
     const formData = await req.formData();
+
+    // Validate request and authenticate user
+    const { user, authHeader, companyId } = await validateRequest(
+      req,
+      (formData.get("Company Id") as string | null) || null
+    );
+
+    // Validate form data
     const { file, insuranceCompany, email, country, claimCategory, granularity } = validateFormData(formData);
 
     console.log(`Processing upload for user ${user.id}: ${file.name} (${claimCategory}, ${granularity})`);
