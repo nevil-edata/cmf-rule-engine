@@ -133,7 +133,10 @@ export default function Datasets() {
       <UploadModal
         open={uploadModalOpen}
         onClose={() => setUploadModalOpen(false)}
-        onSuccess={() => setUploadModalOpen(false)}
+        onSuccess={() => {
+          setUploadModalOpen(false);
+          loadDatasets();
+        }}
       />
     </div>
   );
