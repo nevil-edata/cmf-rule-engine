@@ -81,6 +81,10 @@ function toNumeric(value: unknown): number {
 
   if (typeof value === 'string') {
     const trimmed = value.trim();
+    // "True" / "False" text (Python and Excel exports) counts as 1 / 0
+    const lower = trimmed.toLowerCase();
+    if (lower === 'true') return 1;
+    if (lower === 'false') return 0;
     // parseFloat gracefully ignores trailing non-numeric characters (e.g. "4.5 (split)")
     const parsed = parseFloat(trimmed);
     if (!Number.isNaN(parsed)) {

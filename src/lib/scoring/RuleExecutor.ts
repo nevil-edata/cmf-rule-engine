@@ -32,6 +32,30 @@ function toNumeric(value: unknown): number {
 }
 
 /**
+ * The text "True" / "False" (as written by Python and Excel exports) is a boolean for rule purposes.
+ * The CSV parser leaves those capitalised values as strings, so `"False" == false` never matched.
+ */
+function asBoolean(value: unknown): boolean | null {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') {
+    const text = value.trim().toLowerCase();
+    if (text === 'true') return true;
+    if (text === 'false') return false;
+  }
+  return null;
+}
+
+/** Equality used by the = and != operators: booleans compare as booleans, everything else loosely. */
+function valuesEqual(actual: unknown, expected: unknown): boolean {
+  if (typeof expected === 'boolean' || typeof actual === 'boolean') {
+    const a = asBoolean(actual);
+    const e = asBoolean(expected);
+    if (a !== null && e !== null) return a === e;
+  }
+  return actual == expected;
+}
+
+/**
  * Helper function to normalize text for comparison
  * Reused from engine.ts
  */
@@ -153,7 +177,7 @@ export class RuleExecutor {
   private evaluateCondition(
     field: string,
     operator: RuleOperator,
-    expectedValue: any,
+    expectedValue: unknown,
     claim: ClaimData
   ): RuleConditionResult {
     const actualValue = claim[field];
@@ -161,11 +185,11 @@ export class RuleExecutor {
 
     switch (operator) {
       case '=':
-        passed = actualValue == expectedValue;
+        passed = valuesEqual(actualValue, expectedValue);
         break;
 
       case '!=':
-        passed = actualValue != expectedValue;
+        passed = !valuesEqual(actualValue, expectedValue);
         break;
 
       case '>':
