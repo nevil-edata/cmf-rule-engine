@@ -1,6 +1,90 @@
 import { supabase } from './supabase';
 import type { Tree, TreeType } from '../types/tree';
 import type { ClaimCategory, DatasetGranularity } from './types';
+import type { RuleItem } from '../types/ruleBuilder';
+
+// Shapes of the rows Supabase returns. The client is untyped, so rows arrive as `any`;
+// these interfaces say what each query actually selects.
+interface TreeRow {
+  id: string;
+  name: string;
+  tree_type: string;
+  company_id: string;
+  structure: unknown;
+  created_at: string;
+}
+
+interface UploadStatusRow {
+  id: string;
+  status: 'uploading' | 'processing' | 'uploaded' | 'failed';
+  error_message: string | null;
+  updated_at: string;
+}
+
+interface DatasetRow {
+  id: number;
+  insurance_company: string;
+  country: string;
+  file_name: string | null;
+  nickname: string | null;
+  date_period: string | null;
+  rows: number;
+  columns: number;
+  arabic_columns: number | null;
+  raw_file_path: string | null;
+  aligned_file_path: string | null;
+  uploaded_at: string | null;
+  created_at: string;
+  user_id: string | null;
+  company_id: string;
+  alignment_mapping: Record<string, string> | null;
+  claim_category: string;
+  granularity: string;
+}
+
+interface DatasetWithUploadStatusRow extends DatasetRow {
+  dataset_upload_status?: UploadStatusRow[] | null;
+}
+
+interface DatasetWithRuleSetsRow extends DatasetRow {
+  rule_sets?: { id: string; rule_count: number | null; last_edited_at: string }[] | null;
+}
+
+interface DimensionRow {
+  id: number;
+  name: string;
+  display_name: string;
+  category: string;
+  data_type: string;
+  is_critical: boolean | null;
+  claim_category: string;
+}
+
+interface ColumnPresenceRow {
+  dimensions: DimensionRow;
+}
+
+interface TreeAssociationRow {
+  id: string;
+  tree_id: string;
+  evaluated_at: string;
+  results_jsonb: unknown;
+  metadata: unknown;
+  trees: { name: string; tree_type: string };
+}
+
+interface RuleSetRow {
+  id: string;
+  name: string | null;
+  dataset_id: number;
+  rules: RuleItem[] | null;
+  rule_count: number | null;
+  last_edited_at: string;
+  created_at: string;
+  updated_at: string;
+  user_id: string;
+  company_id: string;
+}
 
 export async function createTree(tree: Omit<Tree, 'createdAt'>): Promise<Tree> {
   // Get current user
@@ -16,7 +100,7 @@ export async function createTree(tree: Omit<Tree, 'createdAt'>): Promise<Tree> {
       id: tree.id,
       name: tree.name,
       tree_type: tree.treeType,
-      structure: tree.structure as any,
+      structure: tree.structure,
       user_id: user.id,
       company_id: tree.companyId,
     })
@@ -27,7 +111,7 @@ export async function createTree(tree: Omit<Tree, 'createdAt'>): Promise<Tree> {
     throw new Error(`Failed to create tree: ${error.message}`);
   }
 
-  return rowToTree(data as any);
+  return rowToTree(data as TreeRow);
 }
 
 export async function getTrees(): Promise<Tree[]> {
@@ -40,7 +124,7 @@ export async function getTrees(): Promise<Tree[]> {
     throw new Error(`Failed to fetch trees: ${error.message}`);
   }
 
-  return (data as any[]).map(rowToTree);
+  return (data as TreeRow[]).map(rowToTree);
 }
 
 export async function getTreeById(id: string): Promise<Tree | null> {
@@ -58,7 +142,7 @@ export async function getTreeById(id: string): Promise<Tree | null> {
     throw new Error(`Failed to fetch tree: ${error.message}`);
   }
 
-  return rowToTree(data as any);
+  return rowToTree(data as TreeRow);
 }
 
 export async function deleteTree(id: string): Promise<void> {
@@ -72,7 +156,7 @@ export async function deleteTree(id: string): Promise<void> {
   }
 }
 
-function rowToTree(row: any): Tree {
+function rowToTree(row: TreeRow): Tree {
   return {
     id: row.id,
     name: row.name,
@@ -133,7 +217,7 @@ export async function getDatasets(): Promise<DatasetWithStatus[]> {
     throw new Error(`Failed to fetch datasets: ${error.message}`);
   }
 
-  return (data as any[]).map(rowToDatasetWithStatus);
+  return (data as DatasetWithUploadStatusRow[]).map(rowToDatasetWithStatus);
 }
 
 export async function getDataset(id: number): Promise<DatasetWithStatus | null> {
@@ -158,7 +242,7 @@ export async function getDataset(id: number): Promise<DatasetWithStatus | null> 
     throw new Error(`Failed to fetch dataset: ${error.message}`);
   }
 
-  return rowToDatasetWithStatus(data as any);
+  return rowToDatasetWithStatus(data as DatasetWithUploadStatusRow);
 }
 
 export async function deleteDataset(id: number): Promise<void> {
@@ -208,7 +292,7 @@ export async function getDatasetUploadStatus(datasetId: number) {
   return data;
 }
 
-function rowToDatasetWithStatus(row: any): DatasetWithStatus {
+function rowToDatasetWithStatus(row: DatasetWithUploadStatusRow): DatasetWithStatus {
   // Get the most recent upload status if it exists
   const uploadStatusArray = row.dataset_upload_status;
   const uploadStatus = Array.isArray(uploadStatusArray) && uploadStatusArray.length > 0
@@ -274,7 +358,8 @@ export async function getDatasetColumnMappings(datasetId: number): Promise<Dimen
     throw new Error(`Failed to fetch column mappings: ${error.message}`);
   }
 
-  return (data as any[]).map((row) => ({
+  // to-one joins come back as a single object (the generated type guesses an array)
+  return (data as unknown as ColumnPresenceRow[]).map((row) => ({
     dimensionId: row.dimensions.id,
     dimensionName: row.dimensions.name,
     displayName: row.dimensions.display_name,
@@ -291,8 +376,8 @@ export interface TreeAssociation {
   treeName: string;
   treeType: TreeType;
   evaluatedAt: string;
-  results: any;
-  metadata: any;
+  results: unknown;
+  metadata: unknown;
 }
 
 export async function getDatasetTreeAssociations(datasetId: number): Promise<TreeAssociation[]> {
@@ -317,7 +402,7 @@ export async function getDatasetTreeAssociations(datasetId: number): Promise<Tre
     throw new Error(`Failed to fetch tree associations: ${error.message}`);
   }
 
-  return (data as any[]).map((row) => ({
+  return (data as unknown as TreeAssociationRow[]).map((row) => ({
     id: row.id,
     treeId: row.tree_id,
     treeName: row.trees.name,
@@ -331,8 +416,8 @@ export async function getDatasetTreeAssociations(datasetId: number): Promise<Tre
 export interface CreateTreeAssociationParams {
   datasetId: number;
   treeId: string;
-  resultsJsonb: any;
-  metadata?: any;
+  resultsJsonb: unknown;
+  metadata?: unknown;
 }
 
 export async function createTreeAssociation(params: CreateTreeAssociationParams): Promise<string> {
@@ -401,7 +486,7 @@ export async function getAllDimensions(claimCategory?: ClaimCategory): Promise<D
     throw new Error(`Failed to fetch dimensions: ${error.message}`);
   }
 
-  return (data as any[]).map((row) => ({
+  return (data as DimensionRow[]).map((row) => ({
     id: row.id,
     name: row.name,
     displayName: row.display_name,
@@ -435,7 +520,7 @@ export interface RuleSet {
   id: string;
   name: string | null;
   datasetId: number;
-  rules: any[];
+  rules: RuleItem[];
   ruleCount: number;
   lastEditedAt: string;
   createdAt: string;
@@ -458,7 +543,7 @@ export interface DatasetWithRuleset extends Dataset {
  */
 export async function upsertRuleset(
   datasetId: number,
-  rules: any[],
+  rules: RuleItem[],
   companyId: string
 ): Promise<RuleSet> {
   const { data: { user } } = await supabase.auth.getUser();
@@ -485,7 +570,7 @@ export async function upsertRuleset(
     throw new Error(`Failed to upsert ruleset: ${error.message}`);
   }
 
-  return rowToRuleSet(data as any);
+  return rowToRuleSet(data as RuleSetRow);
 }
 
 /**
@@ -503,7 +588,7 @@ export async function getRulesetForDataset(datasetId: number): Promise<RuleSet |
     throw new Error(`Failed to fetch ruleset: ${error.message}`);
   }
 
-  return data ? rowToRuleSet(data as any) : null;
+  return data ? rowToRuleSet(data as RuleSetRow) : null;
 }
 
 /**
@@ -527,7 +612,7 @@ export async function getDatasetsWithRulesets(): Promise<DatasetWithRuleset[]> {
     throw new Error(`Failed to fetch datasets with rulesets: ${error.message}`);
   }
 
-  return (data as any[]).map((row) => {
+  return (data as DatasetWithRuleSetsRow[]).map((row) => {
     const ruleSetArray = row.rule_sets;
     const ruleset = Array.isArray(ruleSetArray) && ruleSetArray.length > 0
       ? {
@@ -561,7 +646,7 @@ export async function getDatasetsWithRulesets(): Promise<DatasetWithRuleset[]> {
   });
 }
 
-function rowToRuleSet(row: any): RuleSet {
+function rowToRuleSet(row: RuleSetRow): RuleSet {
   return {
     id: row.id,
     name: row.name,

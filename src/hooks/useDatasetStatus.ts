@@ -75,7 +75,13 @@ export function useDatasetStatus(datasetId: number | null) {
         },
         (payload) => {
           if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
-            const newData = payload.new as any;
+            const newData = payload.new as {
+              id: string;
+              dataset_id: number | null;
+              status: UploadStatus['status'];
+              error_message: string | null;
+              updated_at: string;
+            };
             if (mounted) {
               setStatus({
                 id: newData.id,

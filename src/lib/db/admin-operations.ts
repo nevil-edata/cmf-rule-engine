@@ -54,7 +54,7 @@ export interface SlotRequest {
   requestedBy: string;
   requestedByName: string | null;
   requestedSlots: number;
-  status: 'pending' | 'approved' | 'denied';
+  status: 'pending' | 'approved' | 'denied' | 'cancelled';
   reviewedBy: string | null;
   createdAt: string;
   updatedAt: string;
