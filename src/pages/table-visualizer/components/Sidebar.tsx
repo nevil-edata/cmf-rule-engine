@@ -210,7 +210,11 @@ export function Sidebar(props: SidebarProps) {
         </Label>
 
         {!validation ? (
-          <p className="text-xs text-muted-foreground">Upload data to validate columns</p>
+          <p className="text-xs text-muted-foreground">
+            {analysisMode === 'trees' && fileMetadata && !selectedTreeId
+              ? 'Select a decision tree to check this file’s columns'
+              : 'Upload data to validate columns'}
+          </p>
         ) : (
           <div className="space-y-3">
             {/* Claim Number Selector */}
