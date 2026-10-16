@@ -75,10 +75,17 @@ export function useRuleAutoSave(datasetId: number, hasLoaded: boolean, companyId
       return;
     }
 
+    // Changed, but we do not know which company to save it for yet: keep the change pending
+    // (and do not claim it is saved) until the company id arrives, then this effect runs again.
+    if (!companyId) {
+      setSaveStatus('saving');
+      return;
+    }
+
     // Update the reference and save
     initialRulesRef.current = currentRulesStr;
     save();
-  }, [rules, hasLoaded, save, canWrite]);
+  }, [rules, hasLoaded, save, canWrite, companyId, setSaveStatus]);
 
   return { saveStatus, lastSavedAt, save };
 }
