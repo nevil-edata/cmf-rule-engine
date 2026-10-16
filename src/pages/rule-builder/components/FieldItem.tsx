@@ -40,16 +40,16 @@ export function FieldItem({ dimension }: FieldItemProps) {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       onDoubleClick={handleDoubleClick}
-      className="flex items-center gap-2 px-2 py-1.5 rounded cursor-grab hover:bg-zinc-800 transition-colors group select-none"
+      className="flex items-center gap-2 px-2 py-1.5 rounded cursor-grab hover:bg-muted transition-colors group select-none"
       title={`${dimension.displayName} (${dimension.dataType})${dimension.isCritical ? ' - Critical' : ''}`}
     >
-      <GripVertical className="h-3 w-3 text-zinc-600 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
-      <span className="text-xs text-zinc-300 truncate flex-1 font-medium">
+      <GripVertical className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+      <span className="text-xs text-foreground/80 truncate flex-1 font-medium">
         {dimension.displayName}
       </span>
       {dimension.isCritical && (
         <span
-          className="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0"
+          className="w-1.5 h-1.5 rounded-full bg-destructive flex-shrink-0"
           title="Critical field"
         />
       )}

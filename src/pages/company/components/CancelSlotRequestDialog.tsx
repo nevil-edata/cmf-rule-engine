@@ -48,11 +48,11 @@ export function CancelSlotRequestDialog({
         <DialogHeader>
           <DialogTitle>Cancel Slot Request</DialogTitle>
         </DialogHeader>
-        <p className="text-sm text-zinc-400">
+        <p className="text-sm text-muted-foreground">
           Are you sure you want to cancel your pending slot request for {slotsCount} slots?
         </p>
 
-        {error && <div className="text-sm text-red-500">{error}</div>}
+        {error && <div className="text-sm text-destructive">{error}</div>}
 
         <DialogFooter>
           <Button
@@ -60,7 +60,7 @@ export function CancelSlotRequestDialog({
             variant="outline"
             onClick={onClose}
             disabled={loading}
-            className="border-zinc-800 text-zinc-400 hover:text-zinc-50"
+            className="border-border text-muted-foreground hover:text-foreground"
           >
             Go Back
           </Button>
@@ -68,7 +68,7 @@ export function CancelSlotRequestDialog({
             type="button"
             onClick={handleConfirm}
             disabled={loading}
-            className="bg-red-600 text-white hover:bg-red-700"
+            className="bg-destructive text-white hover:bg-destructive"
           >
             {loading ? 'Cancelling...' : 'Confirm Cancellation'}
           </Button>

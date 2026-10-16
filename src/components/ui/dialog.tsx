@@ -84,7 +84,7 @@ function DialogOverlay({ className }: DialogOverlayProps) {
   return (
     <div
       className={cn(
-        'fixed inset-0 z-50 bg-black/60 backdrop-blur-sm',
+        'fixed inset-0 z-50 bg-navy-950/60 backdrop-blur-sm',
         className
       )}
       onClick={() => onOpenChange(false)}
@@ -109,8 +109,8 @@ function DialogContent({ className, children }: DialogContentProps) {
         <div
           className={cn(
             'fixed left-1/2 top-1/2 z-[60] -translate-x-1/2 -translate-y-1/2',
-            'bg-[var(--color-bg-panel)] border border-[var(--color-border-subtle)]',
-            'rounded-lg shadow-xl w-full max-w-lg p-6',
+            'bg-card text-card-foreground border border-border',
+            'rounded-2xl shadow-[var(--shadow-pop)] w-full max-w-lg p-6',
             className
           )}
           onClick={(e) => e.stopPropagation()}
@@ -142,7 +142,7 @@ interface DialogTitleProps {
 
 function DialogTitle({ className, children }: DialogTitleProps) {
   return (
-    <h2 className={cn('text-lg font-semibold', className)}>
+    <h2 className={cn('text-lg font-semibold tracking-tight text-foreground', className)}>
       {children}
     </h2>
   );
@@ -155,7 +155,7 @@ interface DialogDescriptionProps {
 
 function DialogDescription({ className, children }: DialogDescriptionProps) {
   return (
-    <p className={cn('text-sm text-zinc-400', className)}>
+    <p className={cn('text-sm text-muted-foreground', className)}>
       {children}
     </p>
   );
@@ -186,8 +186,8 @@ function DialogClose({ className }: DialogCloseProps) {
       type="button"
       onClick={() => onOpenChange(false)}
       className={cn(
-        'rounded-sm opacity-70 transition-opacity hover:opacity-100',
-        'focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2',
+        'rounded-sm text-muted-foreground opacity-80 transition-opacity hover:opacity-100',
+        'focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2',
         className
       )}
     >

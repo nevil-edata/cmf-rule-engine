@@ -84,7 +84,7 @@ export function useAutocomplete(
             dataType: d.dataType,
           }));
 
-      case 'operator':
+      case 'operator': {
         // Get operators applicable for the field's data type
         const applicableOps = currentDimension
           ? getOperatorsForType(currentDimension.dataType)
@@ -101,6 +101,7 @@ export function useAutocomplete(
             displayValue: op.name,
             description: undefined,
           }));
+      }
 
       case 'value':
         // For string fields, show distinct values

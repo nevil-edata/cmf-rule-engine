@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Database, Loader2, ListChecks, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { getDatasetsWithRulesets, type DatasetWithRuleset } from '@/lib/db/operations';
 import { useAlignedDatasetLoader } from '../hooks/useAlignedDatasetLoader';
 import type { RuleItem } from '@/lib/types/ruleBuilder';
@@ -65,43 +65,44 @@ export function RulesDatasetSelector({ onDatasetSelect, isLoading }: RulesDatase
   return (
     <div className="space-y-3">
       <div className="space-y-2">
-        <Select
+        <SearchableSelect
+          aria-label="Dataset"
           value={selectedDatasetId?.toString() ?? ''}
-          onChange={(e) => setSelectedDatasetId(e.target.value ? Number(e.target.value) : null)}
-          options={[
-            { value: '', label: '-- Select a dataset --' },
-            ...datasets.map(d => ({
-              value: d.id.toString(),
-              label: `${d.fileName || `Dataset ${d.id}`} - ${d.insuranceCompany}${d.ruleset ? ` (${d.ruleset.ruleCount} rules)` : ' (no rules)'}`
-            }))
-          ]}
+          onChange={(v) => setSelectedDatasetId(v ? Number(v) : null)}
+          placeholder="-- Select a dataset --"
+          searchPlaceholder="Type a file or company name…"
+          options={datasets.map(d => ({
+            value: d.id.toString(),
+            label: d.fileName || `Dataset ${d.id}`,
+            hint: `${d.insuranceCompany}${d.ruleset ? ` (${d.ruleset.ruleCount} rules)` : ' (no rules)'}`,
+          }))}
           disabled={loadingDatasets || isLoading || downloading}
         />
 
         {selectedDataset && (
-          <div className="rounded border p-2" style={{ borderColor: '#3f3f46', backgroundColor: '#27272a' }}>
+          <div className="rounded border p-2" style={{ borderColor: 'var(--color-input)', backgroundColor: 'var(--color-muted)' }}>
             <div className="flex items-start gap-2">
-              <Database className="h-4 w-4 text-blue-400 flex-shrink-0 mt-0.5" />
+              <Database className="h-4 w-4 text-info flex-shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-zinc-100">
+                <p className="text-xs font-medium text-foreground">
                   {selectedDataset.fileName || `Dataset #${selectedDataset.id}`}
                 </p>
                 <div className="mt-1 space-y-0.5">
-                  <p className="text-[10px] text-zinc-400">
+                  <p className="text-[10px] text-muted-foreground">
                     <span className="font-medium">Company:</span> {selectedDataset.insuranceCompany}
                   </p>
-                  <p className="text-[10px] text-zinc-400">
+                  <p className="text-[10px] text-muted-foreground">
                     <span className="font-medium">Country:</span> {selectedDataset.country}
                   </p>
-                  <p className="text-[10px] text-zinc-400">
+                  <p className="text-[10px] text-muted-foreground">
                     <span className="font-medium">Size:</span> {selectedDataset.rows} rows
                   </p>
                 </div>
 
                 {/* Rules status */}
                 <div className="mt-2 flex items-center gap-2">
-                  <ListChecks className={`h-3.5 w-3.5 ${hasRules ? 'text-green-400' : 'text-zinc-500'}`} />
-                  <span className={`text-[10px] ${hasRules ? 'text-green-400' : 'text-zinc-500'}`}>
+                  <ListChecks className={`h-3.5 w-3.5 ${hasRules ? 'text-success' : 'text-muted-foreground'}`} />
+                  <span className={`text-[10px] ${hasRules ? 'text-success' : 'text-muted-foreground'}`}>
                     {hasRules
                       ? `${selectedDataset.ruleset!.ruleCount} rules defined`
                       : 'No rules defined'}
@@ -111,8 +112,8 @@ export function RulesDatasetSelector({ onDatasetSelect, isLoading }: RulesDatase
                 {/* Aligned file status */}
                 {!hasAlignedFile && (
                   <div className="mt-1 flex items-center gap-2">
-                    <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
-                    <span className="text-[10px] text-amber-400">
+                    <AlertTriangle className="h-3.5 w-3.5 text-warning" />
+                    <span className="text-[10px] text-warning">
                       No aligned file available
                     </span>
                   </div>
@@ -123,7 +124,7 @@ export function RulesDatasetSelector({ onDatasetSelect, isLoading }: RulesDatase
         )}
 
         {loadError && (
-          <p className="text-xs text-red-400">{loadError}</p>
+          <p className="text-xs text-destructive">{loadError}</p>
         )}
 
         <Button
@@ -143,7 +144,7 @@ export function RulesDatasetSelector({ onDatasetSelect, isLoading }: RulesDatase
         </Button>
 
         {selectedDataset && !hasRules && (
-          <p className="text-[10px] text-zinc-500 text-center">
+          <p className="text-[10px] text-muted-foreground text-center">
             Create rules in the Rule Builder first
           </p>
         )}

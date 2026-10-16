@@ -31,9 +31,9 @@ export default function DataGridTab({
     return (
       <div className="border border-dashed border-[var(--color-border-subtle)] rounded-md">
         <div className="flex min-h-[400px] flex-col items-center justify-center text-center p-8">
-          <Database className="h-12 w-12 text-zinc-600 mb-4" />
-          <h3 className="text-lg font-medium text-zinc-300 mb-2">Data preview not loaded</h3>
-          <p className="text-sm text-zinc-500 mb-4 max-w-sm">
+          <Database className="h-12 w-12 text-muted-foreground mb-4" />
+          <h3 className="text-lg font-medium text-foreground/80 mb-2">Data preview not loaded</h3>
+          <p className="text-sm text-muted-foreground mb-4 max-w-sm">
             Click the button below to load and view the dataset rows
           </p>
           <Button onClick={onLoadPreview}>Load Data</Button>
@@ -60,10 +60,10 @@ export default function DataGridTab({
     <div className="flex flex-col border border-[var(--color-border-subtle)] rounded-md overflow-hidden" style={{ height: 'calc(100vh - 340px)' }}>
       <div className="flex-1 overflow-auto">
         <table className="w-full">
-          <thead className="bg-zinc-900 sticky top-0 z-10">
+          <thead className="bg-card sticky top-0 z-10">
             <tr>
               {sortedHeaders.map((header, index) => (
-                <th key={index} className="text-left py-3 px-4 text-xs font-medium text-zinc-400 uppercase whitespace-nowrap">
+                <th key={index} className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase whitespace-nowrap">
                   {header}
                 </th>
               ))}
@@ -73,10 +73,10 @@ export default function DataGridTab({
             {previewData.rows.map((row, rowIndex) => (
               <tr
                 key={rowIndex}
-                className="border-b border-[var(--color-border-subtle)] hover:bg-zinc-900/50 transition-colors"
+                className="border-b border-[var(--color-border-subtle)] hover:bg-card/50 transition-colors"
               >
                 {sortedHeaders.map((header, colIndex) => (
-                  <td key={colIndex} className="px-4 py-3 text-sm text-zinc-300 whitespace-nowrap">
+                  <td key={colIndex} className="px-4 py-3 text-sm text-foreground/80 whitespace-nowrap">
                     {row[header] || '-'}
                   </td>
                 ))}
@@ -86,8 +86,8 @@ export default function DataGridTab({
         </table>
       </div>
 
-      <div className="border-t border-[var(--color-border-subtle)] bg-zinc-900 px-4 py-3 flex justify-between items-center">
-        <p className="text-sm text-zinc-400">
+      <div className="border-t border-[var(--color-border-subtle)] bg-card px-4 py-3 flex justify-between items-center">
+        <p className="text-sm text-muted-foreground">
           Showing rows {startRow}-{endRow} of {totalRows}
         </p>
         <div className="flex gap-2">

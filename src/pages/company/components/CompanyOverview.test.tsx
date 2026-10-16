@@ -80,8 +80,10 @@ describe('CompanyOverview Page (Stream B)', () => {
     expect(screen.getByText('Total Users')).toBeDefined();
     expect(screen.getByText('4')).toBeDefined();
 
+    // Only active users use a slot (3 of the 4 are active), matching the register-user check
+    expect(screen.getByText('3 active, using a slot')).toBeDefined();
     expect(screen.getByText('Available Slots')).toBeDefined();
-    expect(screen.getByText('6')).toBeDefined();
+    expect(screen.getByText('7')).toBeDefined();
   });
 
   it('renders recent activity feed correctly (T-M3-4.B.2.2)', () => {

@@ -10,17 +10,17 @@ const riskConfig = {
   low: {
     icon: CheckCircle2,
     label: 'STP',
-    className: 'bg-green-500/20 text-green-400 border-green-500/50',
+    className: 'bg-success/20 text-success border-success/50',
   },
   moderate: {
     icon: AlertCircle,
     label: 'Moderate',
-    className: 'bg-orange-500/20 text-orange-400 border-orange-500/50',
+    className: 'bg-warning/20 text-warning border-warning/50',
   },
   high: {
     icon: AlertTriangle,
     label: 'High',
-    className: 'bg-red-500/20 text-red-400 border-red-500/50',
+    className: 'bg-destructive/20 text-destructive border-destructive/50',
   },
 };
 

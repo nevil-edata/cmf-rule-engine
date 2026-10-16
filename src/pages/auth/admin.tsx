@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AlertCircle } from 'lucide-react';
+import { AuthShell } from '@/components/brand/AuthShell';
 import { useAuth } from '@/lib/auth/context';
 import { supabase } from '@/lib/db/supabase';
 import { Button } from '@/components/ui/button';
@@ -66,10 +67,13 @@ export default function AdminAuthPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background via-secondary/20 to-background p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Admin password sign in</CardTitle>
+    <AuthShell>
+      <Card className="w-full">
+        <CardHeader className="space-y-2 pb-4">
+          <p className="eyebrow">Administrators</p>
+          <CardTitle className="display text-3xl font-light">
+            Admin password <strong>sign in</strong>
+          </CardTitle>
           <CardDescription>This route is reserved for administrator password access.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -112,6 +116,6 @@ export default function AdminAuthPage() {
           </form>
         </CardContent>
       </Card>
-    </div>
+    </AuthShell>
   );
 }

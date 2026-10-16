@@ -2,12 +2,13 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/shared/Layout/PageHeader';
 import { Plus, Loader2 } from 'lucide-react';
 import { TreeGrid } from './components/TreeGrid';
 import { TreeTable } from './components/TreeTable';
 import { EmptyState } from './components/EmptyState';
 import { ViewModeToggle } from './components/ViewModeToggle';
-import { SearchInput } from './components/SearchInput';
+import { SuggestInput } from '@/components/ui/suggest-input';
 import { Pagination } from './components/Pagination';
 import { useTreeList } from './hooks/useTreeList';
 import { useTreeDelete } from './hooks/useTreeDelete';
@@ -77,10 +78,12 @@ export default function ReviewTrees() {
   return (
     <div className="space-y-8">
       {/* Page Header */}
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight" style={{ color: 'var(--color-foreground)' }}>Decision Trees</h1>
-        <p style={{ color: 'var(--color-text-secondary)' }}>Manage logic flows and claim evaluations.</p>
-      </div>
+      <PageHeader
+        eyebrow="Detection"
+        title="Decision Trees"
+        description="Manage logic flows and claim evaluations."
+        illustration="car"
+      />
 
       {trees.length === 0 ? (
         <EmptyState isAdmin={isAdmin} />
@@ -93,19 +96,17 @@ export default function ReviewTrees() {
 
             {/* Search & New Tree */}
             <div className="flex items-center gap-3">
-              <SearchInput
+              <SuggestInput
+                className="max-w-sm"
                 value={searchQuery}
-                onChange={setSearchQuery}
+                onValueChange={setSearchQuery}
+                suggestions={trees.map((tree) => tree.name)}
                 placeholder="Search trees..."
               />
               {isAdmin && (
                 <Button
                   onClick={() => navigate('/generate-tree')}
-                  style={{
-                    backgroundColor: 'var(--color-foreground)',
-                    color: 'var(--color-background)'
-                  }}
-                  className="hover:opacity-90 transition-opacity whitespace-nowrap"
+                  className="whitespace-nowrap"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   New Tree
@@ -116,7 +117,7 @@ export default function ReviewTrees() {
 
           {/* Content Area */}
           {filteredTrees.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-64 rounded-lg border" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-muted)' }}>
+            <div className="flex h-64 flex-col items-center justify-center rounded-2xl border border-dashed border-input bg-card">
               <p style={{ color: 'var(--color-text-secondary)' }}>
                 {searchQuery ? `No trees found matching "${searchQuery}"` : 'No trees available'}
               </p>

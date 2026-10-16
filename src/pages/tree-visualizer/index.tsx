@@ -63,7 +63,7 @@ export default function TreeVisualizer() {
           size="sm"
           onClick={() => navigate(`/visualize-trace/${treeId}`)}
           className="gap-2"
-          style={{ backgroundColor: '#3b82f6', color: '#ffffff' }}
+          style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-primary-foreground)' }}
         >
           <Eye className="h-4 w-4" />
           Evaluate Claims
@@ -111,9 +111,9 @@ export default function TreeVisualizer() {
     return (
       <div
         className="h-full w-full flex items-center justify-center"
-        style={{ backgroundColor: '#1a1a1a' }}
+        style={{ backgroundColor: 'var(--color-background)' }}
       >
-        <Loader2 className="h-8 w-8 animate-spin" style={{ color: '#a1a1aa' }} />
+        <Loader2 className="h-8 w-8 animate-spin" style={{ color: 'var(--color-muted-foreground)' }} />
       </div>
     );
   }
@@ -122,9 +122,9 @@ export default function TreeVisualizer() {
     return (
       <div
         className="h-full w-full flex flex-col items-center justify-center gap-4"
-        style={{ backgroundColor: '#1a1a1a' }}
+        style={{ backgroundColor: 'var(--color-background)' }}
       >
-        <p style={{ color: '#ef4444' }}>Error: {error || 'Tree not found'}</p>
+        <p style={{ color: 'var(--color-destructive)' }}>Error: {error || 'Tree not found'}</p>
         <Button variant="outline" onClick={() => navigate('/review-trees')}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Trees

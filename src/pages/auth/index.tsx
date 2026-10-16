@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle } from 'lucide-react';
+import { AuthShell } from '@/components/brand/AuthShell';
 
 function getOtpErrorMessage(rawMessage: string) {
   const message = rawMessage.toLowerCase();
@@ -87,10 +88,13 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background via-secondary/20 to-background p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Sign in</CardTitle>
+    <AuthShell>
+      <Card className="w-full">
+        <CardHeader className="space-y-2 pb-4">
+          <p className="eyebrow">Secure access</p>
+          <CardTitle className="display text-3xl font-light">
+            Sign <strong>in</strong>
+          </CardTitle>
           <CardDescription>Use the one-time code sent to your email.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -115,9 +119,11 @@ export default function AuthPage() {
                   id="otp"
                   type="text"
                   inputMode="numeric"
+                  autoComplete="one-time-code"
                   placeholder="Enter 6-digit code"
                   value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
+                  // Pasting from the email often brings a trailing space (or "123 456"): keep digits only
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                   required
                 />
               </div>
@@ -187,6 +193,6 @@ export default function AuthPage() {
           </form>
         </CardContent>
       </Card>
-    </div>
+    </AuthShell>
   );
 }

@@ -70,7 +70,7 @@ export function validateSyntax(
 
       case 'operator':
         // Expecting an operator
-        if (token.type === 'operator' || OPERATOR_SYMBOLS.includes(token.value.toLowerCase() as any)) {
+        if (token.type === 'operator' || (OPERATOR_SYMBOLS as readonly string[]).includes(token.value.toLowerCase())) {
           validatedToken.type = 'operator';
           validatedToken.hasError = false;
           // Check if operator requires value
@@ -134,7 +134,7 @@ export function validateSyntax(
 function isOperatorOrConnector(value: string): boolean {
   const lower = value.toLowerCase();
   return (
-    OPERATOR_SYMBOLS.includes(lower as any) ||
+    (OPERATOR_SYMBOLS as readonly string[]).includes(lower) ||
     lower === 'and' ||
     lower === 'or'
   );
@@ -151,13 +151,14 @@ export function getExpectedTokenType(tokens: Token[]): ExpectedTokenType {
   switch (lastToken.type) {
     case 'field':
       return 'operator';
-    case 'operator':
+    case 'operator': {
       // Check if operator requires value
       const op = getOperatorBySymbol(lastToken.value);
       if (op && !operatorRequiresValue(op.symbol)) {
         return 'connector_or_end';
       }
       return 'value';
+    }
     case 'value':
       return 'connector_or_end';
     case 'connector':

@@ -19,7 +19,7 @@ export function SeverityBadge({ severity, size = 'sm' }: SeverityBadgeProps) {
         className={cn(
           'inline-flex items-center rounded font-medium',
           sizeClasses[size],
-          'bg-zinc-700/50 text-zinc-400'
+          'bg-muted/50 text-muted-foreground'
         )}
       >
         None
@@ -28,8 +28,8 @@ export function SeverityBadge({ severity, size = 'sm' }: SeverityBadgeProps) {
   }
 
   const colorClasses = severity === 'high'
-    ? 'bg-red-500/20 text-red-400 border-red-500/30'
-    : 'bg-orange-500/20 text-orange-400 border-orange-500/30';
+    ? 'bg-destructive/20 text-destructive border-destructive/30'
+    : 'bg-warning/20 text-warning border-warning/30';
 
   return (
     <span

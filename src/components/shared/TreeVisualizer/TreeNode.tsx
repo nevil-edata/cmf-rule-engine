@@ -1,4 +1,5 @@
 import type { TreeNode } from '@/lib/types/tree';
+import { getLeafColor } from '@/lib/utils/leafColor';
 import { isLeafNode } from '@/lib/types/tree';
 import {
   parseCondition,
@@ -8,10 +9,7 @@ import {
 } from './utils';
 
 function getColorForValue(value: number, min: number, max: number): string {
-  if (max === min) return `hsl(60, 70%, 45%)`;
-  const normalized = (value - min) / (max - min);
-  const hue = (1 - normalized) * 120; // 0 (red) to 120 (green)
-  return `hsl(${hue}, 70%, 45%)`;
+  return getLeafColor(value, min, max);
 }
 
 interface TreeNodeProps {

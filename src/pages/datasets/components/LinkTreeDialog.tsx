@@ -67,7 +67,7 @@ export function LinkTreeDialog({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-950/60 backdrop-blur-sm">
       <Card className="w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
         <CardHeader>
           <CardTitle>Link Existing Tree</CardTitle>

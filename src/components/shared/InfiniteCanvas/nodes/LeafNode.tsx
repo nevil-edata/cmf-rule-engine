@@ -16,12 +16,12 @@ function LeafNodeComponent({ data }: LeafNodeProps) {
         type="target"
         position={Position.Top}
         id="top"
-        className="!bg-zinc-500 !border-zinc-600 !w-2 !h-2"
+        className="!bg-muted !border-input !w-2 !h-2"
       />
 
       {/* Node container */}
       <div
-        className="rounded-md border px-4 py-2 min-w-[80px]"
+        className="rounded-lg border px-4 py-2 min-w-[80px]"
         style={{
           backgroundColor: data.color,
           borderColor: 'transparent',

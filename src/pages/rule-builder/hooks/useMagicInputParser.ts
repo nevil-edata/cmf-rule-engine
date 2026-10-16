@@ -55,13 +55,14 @@ export function useMagicInputParser(text: string, cursorPos: number): ParseResul
           return 'value';
         case 'connector':
           return 'connector';
-        case 'unknown':
+        case 'unknown': {
           // For unknown tokens, determine what we expect at this position
           // by looking at tokens strictly before this one
           const tokensBefore = tokens.filter(t => t.end < currentToken.start);
           const expected = getExpectedTokenType(tokensBefore);
           if (expected === 'connector_or_end') return 'connector';
           return expected;
+        }
       }
     }
 

@@ -5,11 +5,12 @@
  * No slot UI here - that belongs on /company (Stream B).
  */
 
-import { Loader2, Search, UserPlus, Users, Pencil, UserX, UserCheck } from 'lucide-react';
+import { Loader2, UserPlus, Users, Pencil, UserX, UserCheck } from 'lucide-react';
 import { useSetAtom } from 'jotai';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { SuggestInput } from '@/components/ui/suggest-input';
 import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/shared/Layout/PageHeader';
 import { headerBreadcrumbsAtom } from '@/store/atoms/header';
 import { useEffect } from 'react';
 import { useAuth } from '@/lib/auth/context';
@@ -55,33 +56,28 @@ export default function CompanyUsers() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>
-            Company Users
-          </h1>
-          <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            Manage users in your company
-          </p>
-        </div>
-        <Button size="sm" className="gap-2" onClick={() => setPendingAction({ type: 'register' })}>
-          <UserPlus className="h-4 w-4" />
-          Register User
-        </Button>
-      </div>
+      <PageHeader
+        eyebrow="Your company"
+        title="Company Users"
+        description="Manage users in your company"
+        illustration="grid"
+        actions={
+          <>
+  <Button size="sm" className="gap-2" onClick={() => setPendingAction({ type: 'register' })}>
+            <UserPlus className="h-4 w-4" />
+            Register User
+          </Button>
+          </>
+        }
+      />
 
-      <div className="relative max-w-sm">
-        <Search
-          className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2"
-          style={{ color: 'var(--color-text-muted)' }}
-        />
-        <Input
-          placeholder="Search users..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="pl-9"
-        />
-      </div>
+      <SuggestInput
+        className="max-w-sm"
+        placeholder="Search users..."
+        value={search}
+        onValueChange={setSearch}
+        suggestions={users.flatMap((u) => [u.fullName ?? '', u.email ?? ''].filter(Boolean))}
+      />
 
       {loading ? (
         <div className="flex items-center justify-center py-20">
@@ -93,9 +89,12 @@ export default function CompanyUsers() {
             <p className="text-sm" style={{ color: 'var(--color-text-primary)' }}>
               Failed to load users
             </p>
-            <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
+            <p className="text-xs mt-1 max-w-md text-center" style={{ color: 'var(--color-text-muted)' }}>
               {error}
             </p>
+            <Button variant="outline" size="sm" className="mt-4" onClick={() => void refresh()}>
+              Try again
+            </Button>
           </CardContent>
         </Card>
       ) : filtered.length === 0 ? (
@@ -163,8 +162,8 @@ export default function CompanyUsers() {
                           style={{
                             backgroundColor:
                               user.role === 'client_admin'
-                                ? 'var(--color-brand-blue-bg, rgba(37, 99, 235, 0.1))'
-                                : 'var(--color-muted-bg, rgba(161, 161, 170, 0.1))',
+                                ? 'var(--color-brand-blue-bg, color-mix(in srgb, var(--color-primary) 12%, transparent))'
+                                : 'var(--color-muted-bg, color-mix(in srgb, var(--color-muted-foreground) 14%, transparent))',
                             color:
                               user.role === 'client_admin'
                                 ? 'var(--color-brand-blue)'
@@ -179,8 +178,8 @@ export default function CompanyUsers() {
                           className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
                           style={{
                             backgroundColor: user.isActive
-                              ? 'var(--color-status-green-bg, rgba(34, 197, 94, 0.1))'
-                              : 'var(--color-status-red-bg, rgba(239, 68, 68, 0.1))',
+                              ? 'var(--color-status-green-bg, color-mix(in srgb, var(--color-success) 12%, transparent))'
+                              : 'var(--color-status-red-bg, color-mix(in srgb, var(--color-destructive) 12%, transparent))',
                             color: user.isActive ? 'var(--color-status-green)' : 'var(--color-status-red)',
                           }}
                         >

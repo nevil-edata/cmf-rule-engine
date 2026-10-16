@@ -15,6 +15,7 @@ import { validateTreeStructure } from './utils/validator';
 import {
   detectBooleanCandidates,
   applyBooleanDecisions,
+  type BooleanCandidate,
 } from './utils/booleanFeatures';
 import type { TreeType } from '@/lib/types/tree';
 import {
@@ -57,10 +58,10 @@ value_class_ordinal <= 0.000 (Tree #2 root)
 export default function GenerateTree() {
   const location = useLocation();
   const navigate = useNavigate();
-  const navigationDataset = (location.state as any)?.fromDataset as DatasetContext | undefined;
+  const navigationDataset = (location.state as { fromDataset?: DatasetContext } | null)?.fromDataset;
 
   // State
-  const [companies, setCompanies] = useState<{ id: string; name: string }[]>([]);
+  const [companies, setCompanies] = useState<{ id: string; name: string; country?: string }[]>([]);
   const [selectedCompanyId, setSelectedCompanyId] = useState<string | null>(null);
   const [datasets, setDatasets] = useState<DatasetWithStatus[]>([]);
   const [selectedDatasetId, setSelectedDatasetId] = useState<number | null>(navigationDataset?.id ?? null);
@@ -74,7 +75,7 @@ export default function GenerateTree() {
   const { save, isSaving, error: saveError } = useTreeSave();
 
   // Boolean feature detection
-  const [booleanCandidates, setBooleanCandidates] = useState<any[]>([]);
+  const [booleanCandidates, setBooleanCandidates] = useState<BooleanCandidate[]>([]);
   const [booleanDecisions, setBooleanDecisions] = useState<Record<string, boolean>>({});
 
   // Header atoms
@@ -123,7 +124,7 @@ export default function GenerateTree() {
     setBooleanCandidates(detected);
     setBooleanDecisions((prev) => {
       const next: Record<string, boolean> = {};
-      detected.forEach((candidate: any) => {
+      detected.forEach((candidate) => {
         next[candidate.key] = prev[candidate.key] ?? true;
       });
       return next;
@@ -211,7 +212,7 @@ export default function GenerateTree() {
           onClick={() => setShowSaveDialog(true)}
           disabled={!canSave}
           className="gap-2"
-          style={{ backgroundColor: '#3b82f6', color: '#ffffff' }}
+          style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-primary-foreground)' }}
         >
           <Save className="h-4 w-4" />
           Save Tree
@@ -225,15 +226,15 @@ export default function GenerateTree() {
     return (
       <div
         className="h-full w-full flex items-center justify-center"
-        style={{ backgroundColor: '#09090b' }}
+        style={{ backgroundColor: 'var(--color-background)' }}
       >
-        <Loader2 className="h-8 w-8 animate-spin" style={{ color: '#a1a1aa' }} />
+        <Loader2 className="h-8 w-8 animate-spin" style={{ color: 'var(--color-muted-foreground)' }} />
       </div>
     );
   }
 
   return (
-    <div className="flex h-full" style={{ backgroundColor: '#09090b' }}>
+    <div className="flex h-full" style={{ backgroundColor: 'var(--color-background)' }}>
       {/* Left Panel - Configuration */}
       <LeftPanel
         companies={companies}
@@ -253,14 +254,14 @@ export default function GenerateTree() {
       {/* Right Panel - Input & Preview */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Top Half - FIGS Input */}
-        <div className="h-1/2 border-b" style={{ borderColor: '#27272a' }}>
-          <div className="h-full flex flex-col" style={{ backgroundColor: '#18181b' }}>
-            <div className="flex-shrink-0 px-4 py-3 border-b" style={{ borderColor: '#27272a' }}>
-              <h3 className="text-sm font-medium" style={{ color: '#fafafa' }}>
+        <div className="h-1/2 border-b" style={{ borderColor: 'var(--color-border)' }}>
+          <div className="h-full flex flex-col" style={{ backgroundColor: 'var(--color-card)' }}>
+            <div className="flex-shrink-0 px-4 py-3 border-b" style={{ borderColor: 'var(--color-border)' }}>
+              <h3 className="text-sm font-medium" style={{ color: 'var(--color-foreground)' }}>
                 FIGS Format Input
               </h3>
             </div>
-            <div className="flex-1 overflow-hidden">
+            <div className="min-h-0 flex-1 overflow-hidden">
               <TreeInput
                 value={input}
                 onChange={setInput}
@@ -272,7 +273,7 @@ export default function GenerateTree() {
         </div>
 
         {/* Bottom Half - Tree Preview */}
-        <div className="h-1/2 overflow-auto" style={{ backgroundColor: '#09090b' }}>
+        <div className="h-1/2 overflow-auto" style={{ backgroundColor: 'var(--color-background)' }}>
           <PreviewPane trees={structureToSave} />
         </div>
       </main>

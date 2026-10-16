@@ -3,6 +3,14 @@ import { useAtom } from 'jotai';
 import { uiThemeAtom, appThemeAtom } from '@/store/atoms/ui';
 import { themes } from '@/lib/themes/colors';
 
+const ACCENT_VARS = [
+  '--color-primary',
+  '--color-primary-foreground',
+  '--color-accent',
+  '--color-accent-foreground',
+  '--color-ring',
+] as const;
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [uiTheme] = useAtom(uiThemeAtom);
   const [appTheme] = useAtom(appThemeAtom);
@@ -10,30 +18,26 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Apply light/dark mode class
   useEffect(() => {
     const root = document.documentElement;
-
-    // Remove both classes first
     root.classList.remove('light', 'dark');
-
-    // Add the current theme class
     root.classList.add(uiTheme);
-
-    console.log('[ThemeProvider] UI Theme changed to:', uiTheme);
   }, [uiTheme]);
 
-  // Apply motor/medical accent colors
+  // Apply the vertical accent (motor = base palette, medical = Health teal)
   useEffect(() => {
-    const theme = themes[appTheme];
     const root = document.documentElement;
 
-    // Add transition class for smooth theme changes
-    root.style.transition = 'background-color 0.5s ease-in-out, color 0.5s ease-in-out';
+    if (appTheme === 'motor') {
+      ACCENT_VARS.forEach((name) => root.style.removeProperty(name));
+      return;
+    }
 
-    // Apply CSS variables for accent colors (motor/medical)
-    root.style.setProperty('--color-primary', theme.primary);
-    root.style.setProperty('--color-primary-foreground', theme.primaryForeground);
-    root.style.setProperty('--color-accent', theme.accent);
-    root.style.setProperty('--color-accent-foreground', theme.accentForeground);
-  }, [appTheme]);
+    const colors = themes[appTheme][uiTheme];
+    root.style.setProperty('--color-primary', colors.primary);
+    root.style.setProperty('--color-primary-foreground', colors.primaryForeground);
+    root.style.setProperty('--color-accent', colors.accent);
+    root.style.setProperty('--color-accent-foreground', colors.accentForeground);
+    root.style.setProperty('--color-ring', colors.ring);
+  }, [appTheme, uiTheme]);
 
   return <>{children}</>;
 }

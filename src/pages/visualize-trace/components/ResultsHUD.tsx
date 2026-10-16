@@ -8,9 +8,9 @@ interface ResultsHUDProps {
 }
 
 const riskConfig = {
-  low: { bg: '#22c55e', text: 'Low Risk' },
-  moderate: { bg: '#f97316', text: 'Moderate' },
-  high: { bg: '#ef4444', text: 'High Risk' },
+  low: { bg: 'var(--color-success)', text: 'Low Risk' },
+  moderate: { bg: 'var(--color-warning)', text: 'Moderate' },
+  high: { bg: 'var(--color-destructive)', text: 'High Risk' },
 };
 
 export function ResultsHUD({ result, isEvaluating }: ResultsHUDProps) {
@@ -21,9 +21,9 @@ export function ResultsHUD({ result, isEvaluating }: ResultsHUDProps) {
     return (
       <div
         className="px-6 py-4 border-b flex items-center"
-        style={{ borderColor: '#27272a', backgroundColor: '#18181b' }}
+        style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)' }}
       >
-        <span className="text-sm" style={{ color: '#71717a' }}>
+        <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
           Select a tree and enter claim data to see results
         </span>
       </div>
@@ -36,30 +36,30 @@ export function ResultsHUD({ result, isEvaluating }: ResultsHUDProps) {
   return (
     <div
       className="border-b"
-      style={{ borderColor: '#27272a', backgroundColor: '#18181b' }}
+      style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)' }}
     >
       {/* Summary Row - Always visible */}
       <div
-        className="px-6 py-3 flex items-center justify-between cursor-pointer hover:bg-zinc-800/50 transition-colors"
+        className="px-6 py-3 flex items-center justify-between cursor-pointer hover:bg-muted/50 transition-colors"
         onClick={() => result && setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center gap-6">
           {/* Fraud Probability */}
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: '#71717a' }}>
+            <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>
               Probability
             </span>
-            <span className="text-xl font-bold" style={{ color: '#fafafa' }}>
+            <span className="text-xl font-bold" style={{ color: 'var(--color-foreground)' }}>
               {isEvaluating ? '...' : `${percentage}%`}
             </span>
           </div>
 
           {/* Total Score */}
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: '#71717a' }}>
+            <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>
               Score
             </span>
-            <span className="font-mono text-lg" style={{ color: '#fafafa' }}>
+            <span className="font-mono text-lg" style={{ color: 'var(--color-foreground)' }}>
               {isEvaluating ? '...' : result?.totalScore.toFixed(3)}
             </span>
           </div>
@@ -78,20 +78,20 @@ export function ResultsHUD({ result, isEvaluating }: ResultsHUDProps) {
         {/* Right side: Loading or expand toggle */}
         <div className="flex items-center gap-2">
           {isEvaluating && (
-            <Loader2 className="h-4 w-4 animate-spin" style={{ color: '#71717a' }} />
+            <Loader2 className="h-4 w-4 animate-spin" style={{ color: 'var(--color-text-muted)' }} />
           )}
           {result && !isEvaluating && (
             <button
-              className="p-1 rounded hover:bg-zinc-700 transition-colors"
+              className="p-1 rounded hover:bg-muted transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsExpanded(!isExpanded);
               }}
             >
               {isExpanded ? (
-                <ChevronUp className="h-4 w-4" style={{ color: '#71717a' }} />
+                <ChevronUp className="h-4 w-4" style={{ color: 'var(--color-text-muted)' }} />
               ) : (
-                <ChevronDown className="h-4 w-4" style={{ color: '#71717a' }} />
+                <ChevronDown className="h-4 w-4" style={{ color: 'var(--color-text-muted)' }} />
               )}
             </button>
           )}
@@ -100,13 +100,13 @@ export function ResultsHUD({ result, isEvaluating }: ResultsHUDProps) {
 
       {/* Expanded Breakdown */}
       {isExpanded && result && (
-        <div className="px-6 pb-4 border-t" style={{ borderColor: '#27272a' }}>
+        <div className="px-6 pb-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
           <div className="pt-3 space-y-2">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#71717a' }}>
+              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>
                 Per-Tree Breakdown
               </span>
-              <span className="text-xs font-mono" style={{ color: '#a1a1aa' }}>
+              <span className="text-xs font-mono" style={{ color: 'var(--color-muted-foreground)' }}>
                 {result.paths.length} trees
               </span>
             </div>
@@ -117,14 +117,14 @@ export function ResultsHUD({ result, isEvaluating }: ResultsHUDProps) {
                   <div
                     key={path.treeIndex}
                     className="flex items-center justify-between px-3 py-2 rounded"
-                    style={{ backgroundColor: '#27272a' }}
+                    style={{ backgroundColor: 'var(--color-muted)' }}
                   >
-                    <span className="text-sm font-medium" style={{ color: '#a1a1aa' }}>
+                    <span className="text-sm font-medium" style={{ color: 'var(--color-muted-foreground)' }}>
                       Tree #{path.treeIndex}
                     </span>
                     <span
                       className="text-sm font-mono font-semibold"
-                      style={{ color: isPositive ? '#ef4444' : '#22c55e' }}
+                      style={{ color: isPositive ? 'var(--color-destructive)' : 'var(--color-success)' }}
                     >
                       {isPositive ? '+' : ''}{path.leafValue.toFixed(4)}
                     </span>

@@ -3,12 +3,12 @@ import { useSetAtom } from 'jotai';
 import {
   Users,
   UserPlus,
-  Search,
   Loader2,
   Power,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { PageHeader } from '@/components/shared/Layout/PageHeader';
+import { SuggestInput } from '@/components/ui/suggest-input';
 import { Card, CardContent } from '@/components/ui/card';
 import { headerBreadcrumbsAtom } from '@/store/atoms/header';
 import {
@@ -29,6 +29,7 @@ export default function AdminUsers() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [registerOpen, setRegisterOpen] = useState(false);
   const [companyUser, setCompanyUser] = useState<AdminUser | null>(null);
@@ -47,6 +48,7 @@ export default function AdminUsers() {
   }, []);
 
   async function loadData() {
+    setLoadError(null);
     try {
       const [usersData, companiesData] = await Promise.all([
         getAdminUsers(),
@@ -56,6 +58,7 @@ export default function AdminUsers() {
       setCompanies(companiesData);
     } catch (err) {
       console.error('Failed to load users:', err);
+      setLoadError(err instanceof Error ? err.message : 'Failed to load users');
     } finally {
       setLoading(false);
     }
@@ -127,35 +130,50 @@ export default function AdminUsers() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>
-            Users
-          </h1>
-          <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            Manage platform users across all companies
-          </p>
-        </div>
-        <Button size="sm" className="gap-2" onClick={() => setRegisterOpen(true)}>
-          <UserPlus className="h-4 w-4" />
-          Register User
-        </Button>
-      </div>
+      <PageHeader
+        eyebrow="Administration"
+        title="Users"
+        description="Manage platform users across all companies"
+        actions={
+          <>
+  <Button size="sm" className="gap-2" onClick={() => setRegisterOpen(true)}>
+            <UserPlus className="h-4 w-4" />
+            Register User
+          </Button>
+          </>
+        }
+      />
 
-      <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" style={{ color: 'var(--color-text-muted)' }} />
-        <Input
-          placeholder="Search users..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="pl-9"
-        />
-      </div>
+      <SuggestInput
+        className="max-w-sm"
+        placeholder="Search users..."
+        value={search}
+        onValueChange={setSearch}
+        suggestions={users.flatMap((u) => [u.fullName ?? '', u.email ?? ''].filter(Boolean))}
+      />
 
       {loading ? (
         <div className="flex items-center justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin" style={{ color: 'var(--color-text-muted)' }} />
         </div>
+      ) : loadError ? (
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center py-16">
+            <p className="text-sm font-medium text-foreground">Could not load users</p>
+            <p className="mt-1 max-w-md text-center text-xs text-muted-foreground">{loadError}</p>
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-4"
+              onClick={() => {
+                setLoading(true);
+                void loadData();
+              }}
+            >
+              Try again
+            </Button>
+          </CardContent>
+        </Card>
       ) : filtered.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-16">
@@ -202,8 +220,8 @@ export default function AdminUsers() {
                         className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
                         style={{
                           backgroundColor: user.role === 'admin'
-                            ? 'rgba(37, 99, 235, 0.1)'
-                            : 'rgba(161, 161, 170, 0.1)',
+                            ? 'color-mix(in srgb, var(--color-primary) 12%, transparent)'
+                            : 'color-mix(in srgb, var(--color-muted-foreground) 14%, transparent)',
                           color: user.role === 'admin'
                             ? 'var(--color-brand-blue)'
                             : 'var(--color-text-secondary)',
@@ -219,7 +237,7 @@ export default function AdminUsers() {
                       <span
                         className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
                         style={{
-                          backgroundColor: user.isActive ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                          backgroundColor: user.isActive ? 'color-mix(in srgb, var(--color-success) 12%, transparent)' : 'color-mix(in srgb, var(--color-destructive) 12%, transparent)',
                           color: user.isActive ? 'var(--color-status-green)' : 'var(--color-status-red)',
                         }}
                       >

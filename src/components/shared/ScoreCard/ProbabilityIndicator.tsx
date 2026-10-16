@@ -4,9 +4,9 @@ interface ProbabilityIndicatorProps {
 }
 
 const riskColors = {
-  low: 'bg-green-500',
-  moderate: 'bg-yellow-500',
-  high: 'bg-red-500',
+  low: 'bg-success',
+  moderate: 'bg-warning',
+  high: 'bg-destructive',
 };
 
 export function ProbabilityIndicator({ probability, riskLevel }: ProbabilityIndicatorProps) {
@@ -19,7 +19,7 @@ export function ProbabilityIndicator({ probability, riskLevel }: ProbabilityIndi
         <span className="text-sm font-medium text-muted-foreground">Fraud Probability</span>
         <span className="text-3xl font-bold">{percentage}%</span>
       </div>
-      <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+      <div className="h-3 bg-muted rounded-full overflow-hidden">
         <div
           className={`h-full ${colorClass} transition-all duration-500`}
           style={{ width: `${probability * 100}%` }}

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Database, Upload, Loader2 } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { Upload, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { PageHeader } from '@/components/shared/Layout/PageHeader';
+import { SuggestInput } from '@/components/ui/suggest-input';
 import { getDatasets, deleteDataset, type DatasetWithStatus } from '@/lib/db/operations';
 import { supabase } from '@/lib/db/supabase';
 import { useWriteAccess } from '@/hooks/useWriteAccess';
@@ -14,9 +15,20 @@ export default function Datasets() {
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [search, setSearch] = useState('');
   const { canWrite } = useWriteAccess();
 
   const { sortedDatasets, sortConfig, handleSort } = useDatasetSort(datasets);
+
+  const datasetLabel = (d: DatasetWithStatus) => d.nickname || d.fileName || `Dataset #${d.id}`;
+  const visibleDatasets = useMemo(() => {
+    const words = search.toLowerCase().split(/\s+/).filter(Boolean);
+    if (words.length === 0) return sortedDatasets;
+    return sortedDatasets.filter((d) => {
+      const haystack = `${datasetLabel(d)} ${d.fileName ?? ''} ${d.insuranceCompany} ${d.country}`.toLowerCase();
+      return words.every((w) => haystack.includes(w));
+    });
+  }, [sortedDatasets, search]);
 
   useEffect(() => {
     loadDatasets();
@@ -81,39 +93,35 @@ export default function Datasets() {
 
   return (
     <div className="container mx-auto py-8">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="flex items-center gap-2 text-3xl font-bold">
-            <Database className="h-8 w-8" />
-            Datasets
-          </h1>
-          <p className="mt-1 text-zinc-400 text-sm">
-            Manage your uploaded claims datasets
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
-          {/* Search box (visual only) */}
-          <div className="relative">
-            <Input
+      <PageHeader
+        className="mb-6"
+        eyebrow="Data"
+        title="Datasets"
+        description="Manage your uploaded claims datasets"
+        illustration="grid"
+        actions={
+          <div className="flex items-center gap-4">
+            {/* Search by file name, company or country; suggests matching names */}
+            <SuggestInput
+              className="w-64"
               placeholder="Search files..."
-              className="h-9 bg-black border-zinc-800 pr-16 w-64"
+              value={search}
+              onValueChange={setSearch}
+              suggestions={datasets.flatMap((d) => [datasetLabel(d), d.insuranceCompany])}
             />
-            <kbd className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-zinc-700 bg-zinc-900 px-1.5 font-mono text-[10px] font-medium text-zinc-400">
-              ⌘K
-            </kbd>
+            {/* Upload button */}
+            {canWrite && (
+              <Button onClick={() => setUploadModalOpen(true)}>
+                <Upload className="h-4 w-4 mr-2" />
+                Upload Dataset
+              </Button>
+            )}
           </div>
-          {/* Upload button */}
-          {canWrite && (
-            <Button onClick={() => setUploadModalOpen(true)}>
-              <Upload className="h-4 w-4 mr-2" />
-              Upload Dataset
-            </Button>
-          )}
-        </div>
-      </div>
+        }
+      />
 
       <DatasetTable
-        datasets={sortedDatasets}
+        datasets={visibleDatasets}
         onDelete={handleDelete}
         deletingId={deletingId}
         sortConfig={sortConfig}

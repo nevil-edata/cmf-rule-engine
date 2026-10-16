@@ -12,17 +12,17 @@ export default function GranularityBadge({ granularity, className }: Granularity
     claim: {
       icon: FileText,
       label: 'Claim',
-      colorClass: 'border-green-500/50 bg-green-500/10 text-green-400',
+      colorClass: 'border-success/50 bg-success/10 text-success',
     },
     invoice: {
       icon: Receipt,
       label: 'Invoice',
-      colorClass: 'border-yellow-500/50 bg-yellow-500/10 text-yellow-400',
+      colorClass: 'border-warning/50 bg-warning/10 text-warning',
     },
     item: {
       icon: Package,
       label: 'Item',
-      colorClass: 'border-purple-500/50 bg-purple-500/10 text-purple-400',
+      colorClass: 'border-info/50 bg-info/10 text-info',
     },
   };
 

@@ -9,30 +9,30 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
     switch (status) {
       case 'uploading':
         return {
-          dotColor: 'bg-blue-500',
-          textColor: 'text-blue-400',
+          dotColor: 'bg-info',
+          textColor: 'text-info',
           label: 'Uploading',
           showSpinner: true,
         };
       case 'processing':
         return {
-          dotColor: 'bg-yellow-500',
-          textColor: 'text-yellow-400',
+          dotColor: 'bg-warning',
+          textColor: 'text-warning',
           label: 'Processing',
           showSpinner: true,
         };
       case 'uploaded':
       case 'ready':
         return {
-          dotColor: 'bg-green-500',
-          textColor: 'text-green-400',
+          dotColor: 'bg-success',
+          textColor: 'text-success',
           label: 'Ready',
           showSpinner: false,
         };
       case 'failed':
         return {
-          dotColor: 'bg-red-500',
-          textColor: 'text-red-400',
+          dotColor: 'bg-destructive',
+          textColor: 'text-destructive',
           label: 'Failed',
           showSpinner: false,
         };

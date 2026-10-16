@@ -26,7 +26,7 @@ export function DatasetRuleCard({ dataset, onEdit, canWrite = true }: DatasetRul
         {hasRuleset && dataset.ruleset ? (
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-green-600" />
+              <CheckCircle className="h-4 w-4 text-success" />
               <span className="font-medium">
                 {dataset.ruleset.ruleCount} {dataset.ruleset.ruleCount === 1 ? 'rule' : 'rules'}
               </span>

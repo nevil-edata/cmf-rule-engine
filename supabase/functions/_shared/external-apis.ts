@@ -5,8 +5,8 @@ import type {
   AIAlignmentResponse,
 } from "./types.ts";
 
-const DATA_PREVIEW_URL = "https://data.edata-arabia-uat.pp.ua/stats";
-const ARABIC_CHECK_URL = "https://data.edata-arabia-uat.pp.ua/api/stats";
+const DATA_PREVIEW_URL = "https://data-preview-376890531459.asia-south1.run.app";
+const ARABIC_CHECK_URL = "https://data-language-processor-534363377036.me-central1.run.app/api/stats";
 
 // Get AI alignment edge function URL
 const getAIAlignmentUrl = () => {

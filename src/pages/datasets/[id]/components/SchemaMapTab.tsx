@@ -47,7 +47,7 @@ export default function SchemaMapTab({
               className={`flex items-center gap-1.5 ${
                 dataset.claimCategory === 'medical'
                   ? 'border-pink-500/50 bg-pink-500/10 text-pink-400'
-                  : 'border-blue-500/50 bg-blue-500/10 text-blue-400'
+                  : 'border-info/50 bg-info/10 text-info'
               }`}
             >
               {dataset.claimCategory === 'medical' ? (

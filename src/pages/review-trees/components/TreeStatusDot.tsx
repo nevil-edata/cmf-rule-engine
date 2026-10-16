@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils';
+
 interface TreeStatusDotProps {
   status: 'active' | 'inactive';
 }
@@ -5,10 +7,10 @@ interface TreeStatusDotProps {
 export function TreeStatusDot({ status }: TreeStatusDotProps) {
   return (
     <div
-      className="w-2 h-2 rounded-full flex-shrink-0"
-      style={{
-        backgroundColor: status === 'active' ? '#10b981' : '#6b7280'
-      }}
+      className={cn(
+        'h-2 w-2 flex-shrink-0 rounded-full',
+        status === 'active' ? 'bg-success' : 'bg-muted-foreground/50'
+      )}
     />
   );
 }

@@ -1,5 +1,5 @@
 ﻿import { describe, it, expect, beforeEach, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import AdminCompanies from "./index";
 import * as adminOps from "@/lib/db/admin-operations";
@@ -127,8 +127,25 @@ describe("AdminCompanies", () => {
       const searchInput = screen.getByPlaceholderText("Search companies...");
       await user.type(searchInput, "Acme");
 
-      expect(screen.getByText("Acme Insurance")).toBeDefined();
+      // The name shows in the suggestion list and in the table; the other company is filtered out
+      const table = screen.getByRole("table");
+      expect(within(table).getByText("Acme Insurance")).toBeDefined();
+      expect(within(table).queryByText("Global Health")).toBeNull();
       expect(screen.queryByText("Global Health")).toBeNull();
+    });
+
+    it("should suggest matching company names while typing", async () => {
+      const user = userEvent.setup();
+      render(<AdminCompanies />);
+      await waitFor(() => {
+        expect(screen.getByText("Acme Insurance")).toBeDefined();
+      });
+
+      await user.type(screen.getByPlaceholderText("Search companies..."), "Acm");
+
+      const suggestion = await screen.findByRole("option", { name: "Acme Insurance" });
+      await user.click(suggestion);
+      expect(screen.getByPlaceholderText("Search companies...")).toHaveValue("Acme Insurance");
     });
 
     it("should filter companies by country", async () => {

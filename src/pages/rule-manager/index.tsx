@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSetAtom } from 'jotai';
 import { Loader2 } from 'lucide-react';
 import { headerBreadcrumbsAtom } from '@/store/atoms/header';
+import { PageHeader } from '@/components/shared/Layout/PageHeader';
 import { useDatasetRulesets } from './hooks/useDatasetRulesets';
 import { DatasetRuleCard } from './components/DatasetRuleCard';
 import { EmptyState } from './components/EmptyState';
@@ -48,12 +49,12 @@ export default function RuleManagerPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Rules</h1>
-        <p className="text-muted-foreground mt-2">
-          Manage rules for each dataset. Each dataset maintains one active ruleset.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Detection"
+        title="Rules"
+        description="Manage rules for each dataset. Each dataset maintains one active ruleset."
+        illustration="combination"
+      />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {datasets.map((dataset) => (

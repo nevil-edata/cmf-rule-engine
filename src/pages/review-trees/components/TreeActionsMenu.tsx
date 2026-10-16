@@ -76,7 +76,7 @@ export function TreeActionsMenu({
                     onVisualize(treeId);
                     setIsOpen(false);
                   }}
-                  className="flex w-full items-center gap-3 px-4 py-2 text-sm hover:bg-zinc-800/50 transition-colors"
+                  className="flex w-full items-center gap-3 px-4 py-2 text-sm hover:bg-muted/50 transition-colors"
                   style={{ color: 'var(--color-foreground)' }}
                 >
                   <Eye className="h-4 w-4" />
@@ -87,7 +87,7 @@ export function TreeActionsMenu({
                     onViewStructure(treeId);
                     setIsOpen(false);
                   }}
-                  className="flex w-full items-center gap-3 px-4 py-2 text-sm hover:bg-zinc-800/50 transition-colors"
+                  className="flex w-full items-center gap-3 px-4 py-2 text-sm hover:bg-muted/50 transition-colors"
                   style={{ color: 'var(--color-foreground)' }}
                 >
                   <Network className="h-4 w-4" />
@@ -102,7 +102,7 @@ export function TreeActionsMenu({
                     <button
                       onClick={handleDelete}
                       disabled={isDeleting}
-                      className="flex w-full items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-900/10 transition-colors"
+                      className="flex w-full items-center gap-3 px-4 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors"
                     >
                       <Trash2 className="h-4 w-4" />
                       Delete

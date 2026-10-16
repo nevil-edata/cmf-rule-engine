@@ -11,6 +11,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/shared/Layout/PageHeader';
 import { headerBreadcrumbsAtom } from '@/store/atoms/header';
 import { StatCard } from './components/StatCard';
 import { ActivityFeed } from './components/ActivityFeed';
@@ -50,35 +51,32 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>
-            Admin Dashboard
-          </h1>
-          <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            Platform overview and management
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => navigate('/admin/companies')}
-            className="gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            New Company
-          </Button>
-          <Button
-            size="sm"
-            onClick={() => navigate('/admin/users')}
-            className="gap-2"
-          >
-            <UserPlus className="h-4 w-4" />
-            Register User
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="Administration"
+        title="Admin Dashboard"
+        description="Platform overview and management"
+        actions={
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/admin/companies')}
+              className="gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              New Company
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => navigate('/admin/users')}
+              className="gap-2"
+            >
+              <UserPlus className="h-4 w-4" />
+              Register User
+            </Button>
+          </div>
+        }
+      />
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -110,12 +108,14 @@ export default function AdminDashboard() {
 
       {/* Activity + Requests */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2">
+        <div className={pendingSlotRequests.length > 0 ? 'lg:col-span-2' : 'lg:col-span-3'}>
           <ActivityFeed entries={recentActivity} loading={loading} />
         </div>
-        <div className="space-y-6">
-          <PendingRequests requests={pendingSlotRequests} onUpdate={refresh} />
-        </div>
+        {pendingSlotRequests.length > 0 && (
+          <div className="space-y-6">
+            <PendingRequests requests={pendingSlotRequests} onUpdate={refresh} />
+          </div>
+        )}
       </div>
     </div>
   );

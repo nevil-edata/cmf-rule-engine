@@ -8,14 +8,14 @@ interface ViewModeToggleProps {
 
 export function ViewModeToggle({ mode, onChange }: ViewModeToggleProps) {
   return (
-    <div className="flex items-center gap-1 bg-zinc-900 rounded p-1">
+    <div className="flex items-center gap-1 bg-card rounded p-1">
       <button
         onClick={() => onChange('analytics')}
         className={cn(
           'p-2 rounded transition-colors',
           mode === 'analytics'
-            ? 'bg-zinc-700 text-zinc-100'
-            : 'text-zinc-500 hover:text-zinc-300'
+            ? 'bg-muted text-foreground'
+            : 'text-muted-foreground hover:text-foreground/80'
         )}
         title="Analytics View"
       >
@@ -27,8 +27,8 @@ export function ViewModeToggle({ mode, onChange }: ViewModeToggleProps) {
         className={cn(
           'p-2 rounded transition-colors',
           mode === 'table'
-            ? 'bg-zinc-700 text-zinc-100'
-            : 'text-zinc-500 hover:text-zinc-300'
+            ? 'bg-muted text-foreground'
+            : 'text-muted-foreground hover:text-foreground/80'
         )}
         title="Table View"
       >

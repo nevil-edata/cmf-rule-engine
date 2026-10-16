@@ -270,7 +270,8 @@ describe('M3-3.E.1 - Admin navigation integration', () => {
     it('AdminDashboard renders "Admin Dashboard" heading', async () => {
       render(<AdminDashboard />);
       await waitFor(() => {
-        expect(screen.getByText('Admin Dashboard')).toBeDefined();
+        // The page title is split into light/bold spans, so query by accessible name
+        expect(screen.getByRole('heading', { name: 'Admin Dashboard' })).toBeDefined();
       });
     });
 
@@ -291,7 +292,7 @@ describe('M3-3.E.1 - Admin navigation integration', () => {
     it('AdminLogs renders "Activity Logs" heading', async () => {
       render(<AdminLogs />);
       await waitFor(() => {
-        expect(screen.getByText('Activity Logs')).toBeDefined();
+        expect(screen.getByRole('heading', { name: 'Activity Logs' })).toBeDefined();
       });
     });
   });
@@ -351,7 +352,8 @@ describe('M3-3.E.1 - Admin navigation integration', () => {
       render(<AdminDashboard />);
 
       await waitFor(() => {
-        expect(screen.getByText('Admin Dashboard')).toBeDefined();
+        // The page title is split into light/bold spans, so query by accessible name
+        expect(screen.getByRole('heading', { name: 'Admin Dashboard' })).toBeDefined();
       });
 
       expect(screen.queryByText('Pending Slot Requests')).toBeNull();
@@ -395,7 +397,8 @@ describe('M3-3.E.1 - Admin navigation integration', () => {
       await user.click(retryBtn);
 
       await waitFor(() => {
-        expect(screen.getByText('Admin Dashboard')).toBeDefined();
+        // The page title is split into light/bold spans, so query by accessible name
+        expect(screen.getByRole('heading', { name: 'Admin Dashboard' })).toBeDefined();
         expect(getAdminDashboardCounts).toHaveBeenCalledTimes(2);
       });
     });

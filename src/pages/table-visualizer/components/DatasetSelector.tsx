@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Database, Loader2, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { getDatasets, type DatasetWithStatus } from '@/lib/db/operations';
 import { downloadRawDataset } from '@/lib/storage/helpers';
 
@@ -67,35 +67,36 @@ export function DatasetSelector({ onDatasetSelect, isLoading }: DatasetSelectorP
   return (
     <div className="space-y-3">
       <div className="space-y-2">
-        <Select
+        <SearchableSelect
+          aria-label="Dataset"
           value={selectedDatasetId?.toString() ?? ''}
-          onChange={(e) => setSelectedDatasetId(e.target.value ? Number(e.target.value) : null)}
-          options={[
-            { value: '', label: '-- Select a dataset --' },
-            ...datasets.map(d => ({
-              value: d.id.toString(),
-              label: `${d.fileName || `Dataset ${d.id}`} - ${d.insuranceCompany} - ${d.country} (${d.rows} rows)`
-            }))
-          ]}
+          onChange={(v) => setSelectedDatasetId(v ? Number(v) : null)}
+          placeholder="-- Select a dataset --"
+          searchPlaceholder="Type a file or company name…"
+          options={datasets.map(d => ({
+            value: d.id.toString(),
+            label: d.fileName || `Dataset ${d.id}`,
+            hint: `${d.insuranceCompany} - ${d.country} (${d.rows} rows)`,
+          }))}
           disabled={loadingDatasets || isLoading || downloading}
         />
 
         {selectedDataset && (
-          <div className="rounded border p-2" style={{ borderColor: '#3f3f46', backgroundColor: '#27272a' }}>
+          <div className="rounded border p-2" style={{ borderColor: 'var(--color-input)', backgroundColor: 'var(--color-muted)' }}>
             <div className="flex items-start gap-2">
-              <Database className="h-4 w-4 text-blue-400 flex-shrink-0 mt-0.5" />
+              <Database className="h-4 w-4 text-info flex-shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-zinc-100">
+                <p className="text-xs font-medium text-foreground">
                   {selectedDataset.fileName || `Dataset #${selectedDataset.id}`}
                 </p>
                 <div className="mt-1 space-y-0.5">
-                  <p className="text-[10px] text-zinc-400">
+                  <p className="text-[10px] text-muted-foreground">
                     <span className="font-medium">Company:</span> {selectedDataset.insuranceCompany}
                   </p>
-                  <p className="text-[10px] text-zinc-400">
+                  <p className="text-[10px] text-muted-foreground">
                     <span className="font-medium">Country:</span> {selectedDataset.country}
                   </p>
-                  <p className="text-[10px] text-zinc-400">
+                  <p className="text-[10px] text-muted-foreground">
                     <span className="font-medium">Size:</span> {selectedDataset.rows} rows × {selectedDataset.columns} columns
                   </p>
                 </div>

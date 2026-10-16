@@ -39,19 +39,19 @@ export function SearchInput({
 
   return (
     <div className="relative w-full max-w-sm">
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
       <Input
         value={localValue}
         onChange={(e) => setLocalValue(e.target.value)}
         placeholder={placeholder}
-        className="pl-9 pr-9 bg-zinc-900 border-zinc-800 text-zinc-100 placeholder:text-zinc-500"
+        className="pl-9 pr-9"
       />
       {localValue && (
         <Button
           variant="ghost"
           size="icon"
           onClick={handleClear}
-          className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-zinc-500 hover:text-zinc-300"
+          className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:text-foreground/80"
         >
           <X className="h-4 w-4" />
         </Button>

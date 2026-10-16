@@ -14,21 +14,21 @@ function DecisionNodeComponent({ data }: DecisionNodeProps) {
         type="target"
         position={Position.Top}
         id="top"
-        className="!bg-zinc-500 !border-zinc-600 !w-2 !h-2"
+        className="!bg-muted !border-input !w-2 !h-2"
       />
 
       {/* Node container */}
       <div
-        className="rounded-md border px-4 py-3 min-w-[160px]"
+        className="rounded-xl border px-4 py-3 min-w-[160px] shadow-[var(--shadow-card)]"
         style={{
-          backgroundColor: '#27272a',
-          borderColor: '#3f3f46',
+          backgroundColor: 'var(--color-card)',
+          borderColor: 'var(--color-input)',
         }}
       >
         {/* Feature name */}
         <div
           className="font-mono text-sm font-medium text-center"
-          style={{ color: '#fafafa' }}
+          style={{ color: 'var(--color-foreground)' }}
         >
           {data.featureName}
         </div>
@@ -39,7 +39,7 @@ function DecisionNodeComponent({ data }: DecisionNodeProps) {
         type="source"
         position={Position.Bottom}
         id="bottom"
-        className="!bg-zinc-500 !border-zinc-600 !w-2 !h-2"
+        className="!bg-muted !border-input !w-2 !h-2"
       />
     </div>
   );

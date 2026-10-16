@@ -61,6 +61,15 @@ export default function TableVisualizer() {
     validation?.claimNumberColumn || null
   );
 
+  // Claim numbers offered as suggestions in the search box
+  const claimNumberColumn = validation?.claimNumberColumn ?? null;
+  const claimNumbers = useMemo(() => {
+    if (!claimNumberColumn) return [];
+    return claimsWithResults
+      .map((item) => String(item.claim[claimNumberColumn] ?? ''))
+      .filter((value) => value !== '');
+  }, [claimsWithResults, claimNumberColumn]);
+
   // Hooks for tree evaluation
   const { parse, claims, isLoading: isParsing, error: parseError, clear: clearParse } = useCsvParser();
   const { processor, createProcessor, validateColumns, evaluate: evaluateTrees, isProcessing: isTreeProcessing, error: treeEvalError } = useBulkEvaluation();
@@ -86,6 +95,18 @@ export default function TableVisualizer() {
   useEffect(() => {
     getTrees().then(setTrees);
   }, [setTrees]);
+
+  // The file name and dataset id are remembered across reloads, but the claims themselves are not
+  // (too large to store). On first open with no claims in memory, drop the stale reference so the
+  // data source picker shows instead of a "loaded" file with nothing behind it.
+  useEffect(() => {
+    if (claimsWithResults.length === 0 && !selectedFile && (fileMetadata || currentDatasetId !== null)) {
+      setFileMetadata(null);
+      setCurrentDatasetId(null);
+    }
+    // Mount only: later changes are handled by the file handlers
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Initialize collapsed state if no claim selected
   useEffect(() => {
@@ -302,14 +323,14 @@ export default function TableVisualizer() {
       : null;
 
   return (
-    <div className="flex h-screen" style={{ backgroundColor: '#09090b' }}>
+    <div className="flex h-screen" style={{ backgroundColor: 'var(--color-background)' }}>
       {/* Error Display */}
       {error && (
         <div
-          className="fixed top-16 left-1/2 transform -translate-x-1/2 z-50 p-4 bg-red-950 border border-red-900 rounded-md shadow-lg max-w-2xl"
+          className="fixed top-16 left-1/2 transform -translate-x-1/2 z-50 p-4 bg-destructive border border-destructive rounded-md shadow-lg max-w-2xl"
           style={{ minWidth: '400px' }}
         >
-          <p className="text-sm text-red-400">{error}</p>
+          <p className="text-sm text-destructive">{error}</p>
         </div>
       )}
 
@@ -327,6 +348,7 @@ export default function TableVisualizer() {
           onRulesDatasetSelect={handleRulesDatasetSelect}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          claimNumbers={claimNumbers}
           validation={validation}
           onClaimNumberChange={handleClaimNumberChange}
           onProcess={handleProcess}
@@ -365,7 +387,7 @@ export default function TableVisualizer() {
             />
           </Panel>
 
-          <PanelResizeHandle className="h-[2px] bg-zinc-800 hover:bg-zinc-600 transition-colors cursor-row-resize" />
+          <PanelResizeHandle className="h-[2px] bg-muted hover:bg-input transition-colors cursor-row-resize" />
 
           <Panel defaultSize={panelSizes[1]} minSize={5} maxSize={70}>
             <TraceInspector

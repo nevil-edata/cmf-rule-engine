@@ -24,11 +24,11 @@ export function LogicStack() {
             {showConnector && (
               <div className="flex items-center justify-center py-2">
                 <div className="flex items-center gap-2">
-                  <div className="h-px w-8 bg-zinc-700" />
-                  <span className="px-2 py-0.5 text-xs font-mono rounded border bg-zinc-800 text-zinc-400 border-zinc-700">
+                  <div className="h-px w-8 bg-muted" />
+                  <span className="px-2 py-0.5 text-xs font-mono rounded border bg-muted text-muted-foreground border-input">
                     {defaultConnector}
                   </span>
-                  <div className="h-px w-8 bg-zinc-700" />
+                  <div className="h-px w-8 bg-muted" />
                 </div>
               </div>
             )}

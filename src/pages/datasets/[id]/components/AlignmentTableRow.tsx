@@ -42,17 +42,17 @@ export default function AlignmentTableRow({
           <div className="flex items-center gap-2">
             {isMapped ? (
               <>
-                <CheckCircle2 className="h-4 w-4 text-green-500" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
                 <span>{dimension?.displayName || matchedDimension}</span>
                 {dimension?.isCritical && (
-                  <span className="text-xs px-2 py-0.5 bg-orange-100 text-orange-700 rounded">
+                  <span className="text-xs px-2 py-0.5 bg-warning/10 text-warning rounded">
                     Critical
                   </span>
                 )}
               </>
             ) : (
               <>
-                <AlertCircle className="h-4 w-4 text-yellow-500" />
+                <AlertCircle className="h-4 w-4 text-warning" />
                 <span className="text-muted-foreground">(Unmapped)</span>
               </>
             )}

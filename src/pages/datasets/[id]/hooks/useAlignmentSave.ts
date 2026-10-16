@@ -1,11 +1,12 @@
 import { useState, useCallback } from 'react';
 import { updateDatasetAlignment, type DatasetWithStatus } from '@/lib/db/operations';
 import { supabase } from '@/lib/db/supabase';
+import type { PreviewData } from './useDataPreview';
 
 export function useAlignmentSave(
   datasetId: string | undefined,
   _dataset: DatasetWithStatus | null,
-  previewData: any,
+  previewData: PreviewData | null,
   onSaveSuccess: (newAlignment: Record<string, string>) => void,
   onReloadPreview: () => void
 ) {

@@ -1,4 +1,5 @@
 import type { TreeNode } from '@/lib/types/tree';
+import { getLeafColor } from '@/lib/utils/leafColor';
 import type { TreePath } from '@/lib/types/trace';
 import { isLeafNode } from '@/lib/types/tree';
 import { useMemo } from 'react';
@@ -11,10 +12,7 @@ import {
 } from '@/components/shared/TreeVisualizer/utils';
 
 function getColorForValue(value: number, min: number, max: number): string {
-  if (max === min) return `hsl(60, 70%, 45%)`;
-  const normalized = (value - min) / (max - min);
-  const hue = (1 - normalized) * 120; // 0 (red) to 120 (green)
-  return `hsl(${hue}, 70%, 45%)`;
+  return getLeafColor(value, min, max);
 }
 
 interface TracedTreeNodeProps {
@@ -134,8 +132,8 @@ export function TracedTreeVisualizer({ trees, paths }: TracedTreeVisualizerProps
     <div
       className="min-h-full p-6"
       style={{
-        backgroundColor: '#09090b',
-        backgroundImage: 'radial-gradient(#27272a 1px, transparent 1px)',
+        backgroundColor: 'var(--color-background)',
+        backgroundImage: 'radial-gradient(var(--color-border) 1px, transparent 1px)',
         backgroundSize: '24px 24px',
       }}
     >

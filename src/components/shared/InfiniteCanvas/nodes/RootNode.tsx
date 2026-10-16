@@ -11,23 +11,23 @@ function RootNodeComponent({ data }: RootNodeProps) {
     <div className="relative">
       {/* Node container */}
       <div
-        className="rounded-md border px-4 py-3 min-w-[180px]"
+        className="rounded-xl border-2 px-4 py-3 min-w-[180px] shadow-[var(--shadow-card)]"
         style={{
-          backgroundColor: '#27272a',
-          borderColor: '#3f3f46',
+          backgroundColor: 'var(--color-card)',
+          borderColor: 'var(--color-primary)',
         }}
       >
         {/* Root Split label */}
         <div
           className="text-[10px] font-medium uppercase tracking-wider mb-1"
-          style={{ color: '#60a5fa' }}
+          style={{ color: 'var(--color-ring)' }}
         >
           Root Split
         </div>
         {/* Condition/Feature name */}
         <div
           className="font-mono text-sm font-medium"
-          style={{ color: '#fafafa' }}
+          style={{ color: 'var(--color-foreground)' }}
         >
           {data.condition}
         </div>
@@ -38,7 +38,7 @@ function RootNodeComponent({ data }: RootNodeProps) {
         type="source"
         position={Position.Bottom}
         id="bottom"
-        className="!bg-zinc-500 !border-zinc-600 !w-2 !h-2"
+        className="!bg-muted !border-input !w-2 !h-2"
       />
     </div>
   );

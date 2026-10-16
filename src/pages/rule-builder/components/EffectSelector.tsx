@@ -25,8 +25,8 @@ export function EffectSelector({ disabled, title }: EffectSelectorProps) {
         title={title}
         className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border transition-all ${
           effect === 'moderate'
-            ? 'bg-amber-500/20 border-amber-500/50 text-amber-400'
-            : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:border-zinc-600'
+            ? 'bg-warning/20 border-warning/50 text-warning'
+            : 'bg-card border-input text-muted-foreground hover:border-input'
         } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
       >
         <AlertTriangle className="h-4 w-4" />
@@ -40,8 +40,8 @@ export function EffectSelector({ disabled, title }: EffectSelectorProps) {
         title={title}
         className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border transition-all ${
           effect === 'high'
-            ? 'bg-red-500/20 border-red-500/50 text-red-400'
-            : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:border-zinc-600'
+            ? 'bg-destructive/20 border-destructive/50 text-destructive'
+            : 'bg-card border-input text-muted-foreground hover:border-input'
         } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
       >
         <XOctagon className="h-4 w-4" />

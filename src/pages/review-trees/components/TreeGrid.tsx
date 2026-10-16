@@ -12,7 +12,7 @@ interface TreeGridProps {
 
 export function TreeGrid({ trees, onDelete, onVisualize, onViewStructure, isDeleting, canWrite }: TreeGridProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(18rem,1fr))] gap-5">
       {trees.map((tree) => (
         <TreeCard
           key={tree.id}
