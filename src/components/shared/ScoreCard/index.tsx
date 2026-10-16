@@ -10,21 +10,25 @@ interface ScoreCardProps {
 export function ScoreCard({ result, showBreakdown = true }: ScoreCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  // Lane colours from the ClaimCPU decks: teal (STP), amber (Moderate), red (Non-STP)
   const riskConfig = {
     low: {
       label: 'Low Risk',
-      accent: 'from-emerald-400/90 to-teal-400/70',
-      text: 'text-emerald-700',
+      accent: 'bg-success text-white',
+      text: 'text-success',
+      bar: 'bg-success',
     },
     moderate: {
       label: 'Moderate Risk',
-      accent: 'from-amber-400/90 to-orange-400/70',
-      text: 'text-amber-700',
+      accent: 'bg-warning text-white',
+      text: 'text-warning',
+      bar: 'bg-warning',
     },
     high: {
       label: 'High Risk',
-      accent: 'from-rose-500/90 to-red-400/80',
-      text: 'text-rose-700',
+      accent: 'bg-destructive text-white',
+      text: 'text-destructive',
+      bar: 'bg-destructive',
     },
   } as const;
 
@@ -35,17 +39,18 @@ export function ScoreCard({ result, showBreakdown = true }: ScoreCardProps) {
     result.paths.map((p) => p.leafValue.toFixed(3)).join(' + ') + ` = ${result.totalScore.toFixed(3)}`;
 
   return (
-    <div className="relative overflow-hidden rounded-[2.5rem] border border-white/70 bg-gradient-to-br from-white via-sky-50 to-sky-100/60 p-8 text-slate-900 shadow-[0_45px_85px_-60px_rgba(15,23,42,0.9)] backdrop-blur">
-      <div className="pointer-events-none absolute -right-24 top-[-90px] h-56 w-56 rounded-full bg-primary/20 blur-3xl" />
-      <div className="pointer-events-none absolute -left-16 bottom-[-120px] h-64 w-64 rounded-full bg-sky-200/40 blur-3xl" />
+    <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-8 text-foreground shadow-[var(--shadow-card)]">
+      <div className={`absolute inset-y-0 left-0 w-1.5 ${config.bar}`} />
+      <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-info/10 blur-3xl" />
 
       <div className="relative space-y-8">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div className="space-y-3">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-              Fraud probability
-            </p>
-            <h2 className="text-5xl font-semibold tracking-tight">{percentage}%</h2>
+            <p className="eyebrow">Fraud probability</p>
+            <h2 className="display text-6xl">
+              <strong>{percentage}</strong>
+              <span className="text-4xl text-muted-foreground">%</span>
+            </h2>
             <p className="text-sm text-muted-foreground">
               Based on the combined contribution of {result.paths.length} trees for claim{' '}
               <span className="font-mono text-foreground">{result.claimNumber}</span>.
@@ -53,11 +58,13 @@ export function ScoreCard({ result, showBreakdown = true }: ScoreCardProps) {
           </div>
 
           <div className="relative flex h-28 w-28 items-center justify-center">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/90 to-white/50 shadow-inner shadow-slate-200/80" />
-            <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-white/70 bg-white/70 text-center shadow-lg shadow-slate-200/60">
-              <span className="text-xs font-semibold uppercase tracking-[0.28em] text-muted-foreground">
+            <div className="absolute inset-0 rounded-full border-4 border-secondary" />
+            <div className={`absolute inset-0 rounded-full border-4 border-transparent ${config.text}`}
+              style={{ borderTopColor: 'currentColor', borderRightColor: 'currentColor', transform: 'rotate(-45deg)' }} />
+            <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-muted text-center">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                 Score
-                <span className="block pt-1 text-2xl font-semibold text-slate-900">
+                <span className="block pt-0.5 text-2xl font-semibold tracking-normal text-foreground">
                   {result.totalScore.toFixed(2)}
                 </span>
               </span>
@@ -70,7 +77,7 @@ export function ScoreCard({ result, showBreakdown = true }: ScoreCardProps) {
             <button
               type="button"
               onClick={() => setIsExpanded((prev) => !prev)}
-              className="flex w-full items-center justify-between rounded-2xl border border-white/60 bg-white/70 px-5 py-3 text-left font-mono text-sm text-muted-foreground shadow-inner shadow-slate-200/50 transition-all duration-300 hover:bg-white/90 hover:text-foreground"
+              className="flex w-full items-center justify-between rounded-xl border border-border bg-muted/60 px-5 py-3 text-left font-mono text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               <span>Sum: {breakdownText}</span>
               {isExpanded ? (
@@ -84,14 +91,14 @@ export function ScoreCard({ result, showBreakdown = true }: ScoreCardProps) {
               <div className="grid gap-3 text-sm">
                 {result.paths.map((path, index) => {
                   const isPositive = path.leafValue >= 0;
-                  const valueColor = isPositive ? 'text-rose-500' : 'text-emerald-500';
+                  const valueColor = isPositive ? 'text-destructive' : 'text-success';
 
                   return (
                     <div
                       key={index}
-                      className="flex items-center justify-between rounded-2xl border border-white/60 bg-white/75 px-4 py-3 font-mono shadow-inner shadow-slate-200/50"
+                      className="flex items-center justify-between rounded-xl border border-border bg-muted/40 px-4 py-3 font-mono"
                     >
-                      <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                      <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                         Tree #{path.treeIndex}
                       </span>
                       <span className={`text-base font-semibold ${valueColor}`}>
@@ -106,10 +113,10 @@ export function ScoreCard({ result, showBreakdown = true }: ScoreCardProps) {
           </div>
         )}
 
-        <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/60 bg-white/75 p-4 shadow-inner shadow-slate-200/50">
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-muted/40 p-4">
           <div className="flex items-center gap-3">
             <span
-              className={`inline-flex items-center rounded-full bg-gradient-to-r ${config.accent} px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.3em] text-white shadow shadow-sky-200/70`}
+              className={`inline-flex items-center rounded-full ${config.accent} px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em]`}
             >
               {config.label}
             </span>

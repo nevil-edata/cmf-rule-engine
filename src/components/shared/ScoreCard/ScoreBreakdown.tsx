@@ -18,7 +18,7 @@ export function ScoreBreakdown({ paths, totalScore }: ScoreBreakdownProps) {
       <div className="space-y-2">
         {paths.map((path) => {
           const isPositive = path.leafValue >= 0;
-          const valueColor = isPositive ? 'text-red-600' : 'text-green-600';
+          const valueColor = isPositive ? 'text-destructive' : 'text-success';
 
           return (
             <div

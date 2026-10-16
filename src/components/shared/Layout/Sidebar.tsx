@@ -10,16 +10,16 @@ import {
   Table,
   LogOut,
   ChevronLeft,
-  ChevronRight,
   ListChecks,
   Building2,
   Users,
   ScrollText,
+  CircleHelp,
 } from 'lucide-react';
 import { useAuth, type UserRole } from '@/lib/auth/context';
 import { sidebarCollapsedAtom } from '@/store/atoms/ui';
 import { supabase } from '@/lib/db/supabase';
-import ClaimCPULogo from '@/assets/claims_cpu_logo.jpeg';
+import { ClaimCPULogo, ClaimCPUMark, EdataLogo } from '@/components/brand/BrandLogo';
 
 interface NavItem {
   path: string;
@@ -45,12 +45,21 @@ const adminNavItems: NavItem[] = [
 
 const companyNavItems: NavItem[] = [
   { path: '/company', label: 'Company Overview', icon: Building2, roles: ['client_admin'] },
-  { path: '/company/users', label: 'My Company', icon: Users, roles: ['client_admin'] },
+  { path: '/company/users', label: 'Users', icon: Users, roles: ['client_admin'] },
+];
+
+const helpNavItems: NavItem[] = [
+  { path: '/help', label: 'Help & Guide', icon: CircleHelp, roles: ['admin', 'client_admin', 'client_user'] },
 ];
 
 function isPathActive(currentPath: string, itemPath: string) {
   if (itemPath === '/admin') {
     return currentPath.startsWith('/admin');
+  }
+
+  // /company is the overview only; /company/users has its own entry
+  if (itemPath === '/company') {
+    return currentPath === '/company';
   }
 
   return currentPath === itemPath || currentPath.startsWith(`${itemPath}/`);
@@ -87,6 +96,14 @@ export function Sidebar() {
     }
 
     return companyNavItems.filter((item) => item.roles.includes(role));
+  }, [role]);
+
+  const visibleHelpItems = useMemo(() => {
+    if (!role) {
+      return [];
+    }
+
+    return helpNavItems.filter((item) => item.roles.includes(role));
   }, [role]);
 
   useEffect(() => {
@@ -154,7 +171,7 @@ export function Sidebar() {
     return (
       <div className="space-y-1">
         {sectionTitle && !isCollapsed && (
-          <p className="px-3 pb-1 text-xs font-medium uppercase tracking-wider text-zinc-500">{sectionTitle}</p>
+          <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-teal-200/70">{sectionTitle}</p>
         )}
         {items.map((item) => {
           const active = isPathActive(location.pathname, item.path);
@@ -164,15 +181,18 @@ export function Sidebar() {
               <Button
                 variant="ghost"
                 className={cn(
-                  'w-full gap-3 px-3',
+                  'relative w-full gap-3 px-3',
                   isCollapsed ? 'justify-center' : 'justify-start',
                   active
-                    ? 'bg-zinc-800 text-white font-medium'
-                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'
+                    ? 'bg-sidebar-accent font-medium text-white hover:bg-sidebar-accent hover:text-white'
+                    : 'text-sidebar-foreground hover:bg-sidebar-accent/60 hover:text-white'
                 )}
                 title={isCollapsed ? item.label : undefined}
               >
-                <item.icon className="h-4 w-4 flex-shrink-0" />
+                {active && (
+                  <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-brand-green" />
+                )}
+                <item.icon className={cn('h-4 w-4 flex-shrink-0', active && 'text-teal-200')} />
                 {!isCollapsed && <span className="truncate">{item.label}</span>}
               </Button>
             </Link>
@@ -184,50 +204,65 @@ export function Sidebar() {
 
   return (
     <div
-      className={cn('flex h-screen flex-col border-r transition-all duration-300', isCollapsed ? 'w-[80px]' : 'w-[280px]')}
-      style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)', color: 'var(--color-foreground)' }}
+      className={cn(
+        'flex h-screen flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-all duration-300',
+        isCollapsed ? 'w-[80px]' : 'w-[280px]'
+      )}
     >
-      <div className="flex h-16 items-center justify-between border-b px-6" style={{ borderColor: 'var(--color-border)' }}>
-        <div className="flex items-center gap-3 overflow-hidden font-semibold tracking-tight">
-          <img src={ClaimCPULogo} alt="ClaimCPU" className="h-8 w-auto flex-shrink-0 object-contain" />
-        </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="h-8 w-8 flex-shrink-0"
-          style={{ color: 'var(--color-text-secondary)' }}
-        >
-          {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-        </Button>
+      <div
+        className={cn(
+          'flex h-16 items-center border-b border-sidebar-border',
+          isCollapsed ? 'justify-center px-2' : 'justify-between px-5'
+        )}
+      >
+        {isCollapsed ? (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsCollapsed(false)}
+            className="h-9 w-9 flex-shrink-0 hover:bg-sidebar-accent"
+            title="Expand sidebar"
+          >
+            <ClaimCPUMark className="w-14" />
+          </Button>
+        ) : (
+          <>
+            <div className="flex items-center overflow-hidden">
+              <ClaimCPULogo tone="onDark" className="h-9" />
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsCollapsed(true)}
+              className="h-8 w-8 flex-shrink-0 text-sidebar-muted hover:bg-sidebar-accent hover:text-white"
+              title="Collapse sidebar"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+          </>
+        )}
       </div>
 
-      <div className="flex-1 space-y-5 overflow-y-auto py-6">
-        <nav className="space-y-5 px-4">
+      <div className="relative flex-1 overflow-y-auto py-6">
+        <nav className="relative space-y-5 px-4">
           {renderNavSection(visibleMainItems)}
           {renderNavSection(visibleAdminItems, 'Admin')}
           {renderNavSection(visibleCompanyItems, 'My Company')}
+          {renderNavSection(visibleHelpItems, 'Support')}
         </nav>
       </div>
 
-      <div className="space-y-3 border-t p-4" style={{ borderColor: 'var(--color-border)' }}>
+      <div className="space-y-3 border-t border-sidebar-border p-4">
         {!isCollapsed ? (
           <div className="flex items-center gap-3 px-2">
-            <div
-              className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border text-sm font-semibold"
-              style={{ backgroundColor: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}
-            >
+            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-sidebar-border bg-sidebar-accent text-sm font-semibold text-white">
               {initials}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium" style={{ color: 'var(--color-foreground)' }}>
-                {userName}
-              </p>
-              <p className="truncate text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                {user?.email}
-              </p>
+              <p className="truncate text-sm font-medium text-white">{userName}</p>
+              <p className="truncate text-xs text-sidebar-muted">{user?.email}</p>
               {userRoleLabel && (
-                <p className="mt-0.5 truncate text-xs text-zinc-500">
+                <p className="mt-0.5 truncate text-[11px] font-semibold uppercase tracking-[0.1em] text-teal-200/80">
                   {userRoleLabel}
                   {profile?.role === 'client_user' && companyName ? ` - ${companyName}` : ''}
                 </p>
@@ -236,10 +271,7 @@ export function Sidebar() {
           </div>
         ) : (
           <div className="flex justify-center px-2">
-            <div
-              className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border text-sm font-semibold"
-              style={{ backgroundColor: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}
-            >
+            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-sidebar-border bg-sidebar-accent text-sm font-semibold text-white">
               {initials}
             </div>
           </div>
@@ -248,12 +280,24 @@ export function Sidebar() {
         <Button
           variant="ghost"
           onClick={handleSignOut}
-          className={cn('w-full gap-3 text-zinc-400 hover:bg-red-900/10 hover:text-red-400', isCollapsed ? 'justify-center px-0' : 'justify-start')}
+          className={cn(
+            'w-full gap-3 text-sidebar-foreground hover:bg-destructive/15 hover:text-red-300',
+            isCollapsed ? 'justify-center px-0' : 'justify-start'
+          )}
           title={isCollapsed ? 'Sign Out' : undefined}
         >
           <LogOut className="h-4 w-4 flex-shrink-0" />
           {!isCollapsed && <span>Sign Out</span>}
         </Button>
+
+        {!isCollapsed && (
+          <div className="border-t border-sidebar-border px-2 pt-4">
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-sidebar-muted">
+              Powered by
+            </p>
+            <EdataLogo tone="onDark" className="h-12" />
+          </div>
+        )}
       </div>
     </div>
   );

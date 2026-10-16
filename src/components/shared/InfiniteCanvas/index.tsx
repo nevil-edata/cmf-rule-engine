@@ -27,7 +27,7 @@ const nodeTypes = {
 const defaultEdgeOptions: DefaultEdgeOptions = {
   type: 'smoothstep',
   style: {
-    stroke: '#52525b',
+    stroke: 'var(--color-input)',
     strokeWidth: 2,
   },
 };
@@ -56,13 +56,13 @@ function InfiniteCanvasInner({
   const nodeColor = useCallback((node: Node) => {
     switch (node.type) {
       case 'root':
-        return '#3b82f6';
+        return '#113378';
       case 'decision':
-        return '#3f3f46';
+        return '#9aa6b8';
       case 'leaf':
-        return (node.data as { color?: string })?.color || '#22c55e';
+        return (node.data as { color?: string })?.color || '#2a7a68';
       default:
-        return '#3f3f46';
+        return '#9aa6b8';
     }
   }, []);
 
@@ -72,7 +72,7 @@ function InfiniteCanvasInner({
       style={{
         width: '100%',
         height: '100%',
-        backgroundColor: '#1a1a1a', // Charcoal grey
+        backgroundColor: 'var(--color-background)',
       }}
     >
       <ReactFlow
@@ -98,16 +98,17 @@ function InfiniteCanvasInner({
           variant={BackgroundVariant.Dots}
           gap={20}
           size={1}
-          color="#2a2a2a"
+          color="var(--color-input)"
         />
 
         {/* Minimap in top-right corner */}
         <MiniMap
           nodeColor={nodeColor}
-          maskColor="rgba(0, 0, 0, 0.8)"
+          maskColor="rgba(10, 20, 48, 0.12)"
           style={{
-            backgroundColor: '#18181b',
-            border: '1px solid #3f3f46',
+            backgroundColor: 'var(--color-card)',
+            border: '1px solid var(--color-border)',
+            borderRadius: 12,
             width: 150,
             height: 100,
           }}

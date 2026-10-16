@@ -1,33 +1,85 @@
+import { cn } from '@/lib/utils';
+import { Illustration, type IllustrationName } from '@/components/brand/Illustration';
+
 interface PageHeaderProps {
   title: string;
   description?: string;
   actions?: React.ReactNode;
+  /** Small teal label above the title, e.g. "Detection" */
+  eyebrow?: string;
+  /** Deck creative shown at the right edge of the header */
+  illustration?: IllustrationName;
+  className?: string;
 }
 
-export function PageHeader({ title, description, actions }: PageHeaderProps) {
-  return (
-    <div className="relative overflow-hidden rounded-[2rem] border border-white/60 bg-white/75 p-8 shadow-xl shadow-slate-200/60 backdrop-blur">
-      <div className="pointer-events-none absolute right-10 top-[-60px] h-32 w-32 rounded-full bg-primary/15 blur-2xl" />
-      <div className="pointer-events-none absolute left-10 bottom-[-70px] h-36 w-36 rounded-full bg-sky-200/40 blur-2xl" />
+/** Deck-style headline: light weight with the last word in bold. */
+function EmphasisTitle({ title }: { title: string }) {
+  const trimmed = title.trim();
+  const split = trimmed.lastIndexOf(' ');
 
-      <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-3xl font-semibold tracking-tight text-slate-900 md:text-4xl">
-            {title}
+  if (split === -1) {
+    return <strong>{trimmed}</strong>;
+  }
+
+  return (
+    <>
+      {trimmed.slice(0, split)} <strong>{trimmed.slice(split + 1)}</strong>
+    </>
+  );
+}
+
+export function PageHeader({
+  title,
+  description,
+  actions,
+  eyebrow,
+  illustration = 'network',
+  className,
+}: PageHeaderProps) {
+  const isCreative = illustration !== 'network';
+
+  return (
+    <header
+      className={cn(
+        'relative overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]',
+        className
+      )}
+    >
+      {/* soft brand wash + creative */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_120%_at_100%_0%,color-mix(in_srgb,var(--color-brand-blue)_10%,transparent),transparent_70%)]" />
+      <Illustration
+        name={illustration}
+        className={cn(
+          'absolute hidden object-contain xl:block',
+          !isCreative && 'right-0 top-0 h-full opacity-25 dark:opacity-40',
+          isCreative && (illustration === 'car' || illustration === 'medical')
+            ? 'right-8 top-1/2 h-40 w-48 -translate-y-1/2'
+            : isCreative
+              ? 'right-8 top-1/2 h-28 w-56 -translate-y-1/2'
+              : ''
+        )}
+      />
+
+      <div
+        className={cn(
+          'relative flex flex-col gap-5 px-8 py-7 md:flex-row md:items-center md:justify-between',
+          isCreative && 'xl:pr-72'
+        )}
+      >
+        <div className="min-w-0">
+          {eyebrow && <p className="eyebrow mb-2">{eyebrow}</p>}
+          <h1 className="display text-3xl md:text-4xl">
+            <EmphasisTitle title={title} />
           </h1>
           {description && (
-            <p className="mt-3 max-w-2xl text-base text-muted-foreground">
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
               {description}
             </p>
           )}
         </div>
 
-        {actions && (
-          <div className="flex items-center gap-3 md:justify-end">
-            {actions}
-          </div>
-        )}
+        {actions && <div className="flex flex-shrink-0 items-center gap-3 md:justify-end">{actions}</div>}
       </div>
-    </div>
+    </header>
   );
 }

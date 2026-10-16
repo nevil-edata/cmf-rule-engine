@@ -7,14 +7,12 @@ import {
   getMinMaxLeafValues,
 } from '@/components/shared/TreeVisualizer/utils';
 import type { TreeFlowNode, TreeEdge } from '@/components/shared/InfiniteCanvas/types';
+import { getLeafColor } from '@/lib/utils/leafColor';
 
 // Get color for leaf value based on min/max range
 function getColorForValue(value: number, min: number, max: number): string {
-  if (max === min) return 'hsl(60, 70%, 35%)';
-  const normalized = (value - min) / (max - min);
-  // Red (negative) to Green (positive)
-  const hue = normalized * 120; // 0 (red) to 120 (green)
-  return `hsl(${hue}, 70%, 35%)`;
+  // Canvas view colours high values green (existing behaviour)
+  return getLeafColor(value, min, max, { highIsRed: false });
 }
 
 interface ConversionResult {
@@ -187,8 +185,8 @@ export function treeToReactFlow(
       targetHandle: 'top',
       type: 'smoothstep',
       label: parsed ? formatTrueLabel(parsed) : 'Yes',
-      labelStyle: { fill: '#a1a1aa', fontSize: 11, fontWeight: 500 },
-      labelBgStyle: { fill: '#1a1a1a', fillOpacity: 0.9 },
+      labelStyle: { fill: 'var(--color-muted-foreground)', fontSize: 11, fontWeight: 500 },
+      labelBgStyle: { fill: 'var(--color-background)', fillOpacity: 0.9 },
       labelBgPadding: [4, 2] as [number, number],
       labelBgBorderRadius: 4,
     });
@@ -201,8 +199,8 @@ export function treeToReactFlow(
       targetHandle: 'top',
       type: 'smoothstep',
       label: parsed ? formatFalseLabel(parsed) : 'No',
-      labelStyle: { fill: '#a1a1aa', fontSize: 11, fontWeight: 500 },
-      labelBgStyle: { fill: '#1a1a1a', fillOpacity: 0.9 },
+      labelStyle: { fill: 'var(--color-muted-foreground)', fontSize: 11, fontWeight: 500 },
+      labelBgStyle: { fill: 'var(--color-background)', fillOpacity: 0.9 },
       labelBgPadding: [4, 2] as [number, number],
       labelBgBorderRadius: 4,
     });

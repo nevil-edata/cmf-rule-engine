@@ -24,12 +24,8 @@ export function DropdownMenu({ trigger, children, open, onOpenChange }: Dropdown
       </div>
       {isOpen && (
         <div
-          className="absolute right-0 z-50 mt-1 min-w-[180px] rounded-md border bg-popover p-1 text-popover-foreground shadow-md"
-          style={{
-            backgroundColor: 'var(--color-bg-surface)',
-            borderColor: 'var(--color-border-subtle)',
-          }}
-          onMouseEnter={() => setOpen(true)}
+          className="absolute right-0 z-50 mt-1 min-w-[180px] rounded-xl border border-border bg-popover p-1 text-popover-foreground shadow-[var(--shadow-pop)]"
+                    onMouseEnter={() => setOpen(true)}
           onMouseLeave={() => setOpen(false)}
         >
           {children}
@@ -52,7 +48,7 @@ export function DropdownMenuItem({ onClick, children, disabled, className }: Dro
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors',
+        'relative flex w-full cursor-default select-none items-center rounded-lg px-2.5 py-1.5 text-sm outline-none transition-colors',
         'hover:bg-accent hover:text-accent-foreground disabled:pointer-events-none disabled:opacity-50',
         className
       )}

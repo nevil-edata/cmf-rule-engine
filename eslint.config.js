@@ -21,6 +21,13 @@ export default defineConfig([
         ...globals.browser,
       },
     },
+    rules: {
+      // A leading underscore marks a deliberately unused parameter or variable
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', destructuredArrayIgnorePattern: '^_' },
+      ],
+    },
   },
   {
     files: ['**/*.test.{ts,tsx}', 'src/test-setup.ts'],
