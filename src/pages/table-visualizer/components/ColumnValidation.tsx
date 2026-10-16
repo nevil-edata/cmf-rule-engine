@@ -57,8 +57,8 @@ export function ColumnValidation({ validation, onProceed, onClaimNumberChange, i
           <div className="flex items-center gap-2">
             {validation.isValid ? (
               <>
-                <CheckCircle2 className="h-5 w-5 text-green-600" />
-                <span className="text-green-600 font-medium">
+                <CheckCircle2 className="h-5 w-5 text-success" />
+                <span className="text-success font-medium">
                   All required columns present and claim number selected
                 </span>
               </>

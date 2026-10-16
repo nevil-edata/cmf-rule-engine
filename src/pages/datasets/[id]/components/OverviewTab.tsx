@@ -38,7 +38,7 @@ export default function OverviewTab({
       {quality && quality.missing_critical_columns.length > 0 ? (
         <CriticalColumnsAlert columns={quality.missing_critical_columns} />
       ) : quality && quality.missing_critical_columns.length === 0 ? (
-        <div className="flex items-center gap-2 rounded-lg bg-green-50 dark:bg-green-950 p-3 text-sm text-green-700 dark:text-green-400">
+        <div className="flex items-center gap-2 rounded-lg bg-success/10 dark:bg-success p-3 text-sm text-success dark:text-success">
           <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
           <span>All critical columns are present</span>
         </div>

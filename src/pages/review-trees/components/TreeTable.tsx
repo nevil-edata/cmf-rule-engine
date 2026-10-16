@@ -36,7 +36,7 @@ export function TreeTable({ trees, onDelete, onVisualize, onViewStructure, isDel
       <div className="w-full">
         <table className="w-full caption-bottom text-sm">
           <thead>
-            <tr style={{ borderBottom: '1px solid var(--color-border)', backgroundColor: '#27272a' }}>
+            <tr style={{ borderBottom: '1px solid var(--color-border)', backgroundColor: 'var(--color-muted)' }}>
               <th className="h-14 px-6 text-left align-middle font-semibold text-xs uppercase tracking-wider first:rounded-tl-lg" style={{ color: 'var(--color-text-secondary)' }}>Tree Name</th>
               <th className="h-14 px-6 text-left align-middle font-semibold text-xs uppercase tracking-wider" style={{ color: 'var(--color-text-secondary)' }}>Type</th>
               <th className="h-14 px-6 text-left align-middle font-semibold text-xs uppercase tracking-wider" style={{ color: 'var(--color-text-secondary)' }}>Complexity</th>
@@ -54,7 +54,7 @@ export function TreeTable({ trees, onDelete, onVisualize, onViewStructure, isDel
               <tr
                 key={tree.id}
                 style={{ borderColor: 'var(--color-border)' }}
-                className="border-b transition-colors hover:bg-zinc-800/50"
+                className="border-b transition-colors hover:bg-muted/50"
               >
                 <td className="p-4 align-middle">
                   <div className="flex items-center gap-2">

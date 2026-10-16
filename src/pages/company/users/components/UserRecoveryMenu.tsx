@@ -110,7 +110,7 @@ export function UserRecoveryMenu({
         <span
           className="absolute right-0 top-8 z-50 whitespace-nowrap rounded-md px-2 py-1 text-xs font-medium shadow-md"
           style={{
-            backgroundColor: feedback.type === 'success' ? 'var(--color-status-green-bg, rgba(34, 197, 94, 0.1))' : 'var(--color-status-red-bg, rgba(239, 68, 68, 0.1))',
+            backgroundColor: feedback.type === 'success' ? 'var(--color-status-green-bg, color-mix(in srgb, var(--color-success) 12%, transparent))' : 'var(--color-status-red-bg, color-mix(in srgb, var(--color-destructive) 12%, transparent))',
             color: feedback.type === 'success' ? 'var(--color-status-green)' : 'var(--color-status-red)',
             border: '1px solid var(--color-border-subtle)',
           }}

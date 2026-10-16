@@ -20,12 +20,12 @@ import type { Token } from '@/lib/types/ruleBuilder';
 
 // Token color styles based on type
 const TOKEN_COLORS: Record<string, string> = {
-  field: 'text-blue-400',
-  operator: 'text-amber-400',
-  value: 'text-emerald-400',
-  connector: 'text-purple-400',
-  unknown: 'text-zinc-400',
-  error: 'text-red-400 underline decoration-wavy decoration-red-500',
+  field: 'text-info',
+  operator: 'text-warning',
+  value: 'text-success',
+  connector: 'text-info',
+  unknown: 'text-muted-foreground',
+  error: 'text-destructive underline decoration-wavy decoration-red-500',
 };
 
 function TokenSpan({ token }: { token: Token }) {
@@ -203,7 +203,7 @@ export function MagicInput() {
     <div className="relative">
       {/* Syntax error message */}
       {syntaxError && text.length > 0 && (
-        <div className="absolute -top-8 left-0 right-0 flex items-center gap-1.5 text-xs text-red-400">
+        <div className="absolute -top-8 left-0 right-0 flex items-center gap-1.5 text-xs text-destructive">
           <AlertCircle className="h-3 w-3" />
           <span>{syntaxError}</span>
         </div>
@@ -213,10 +213,10 @@ export function MagicInput() {
       <div
         className={`flex items-center h-12 px-4 rounded-lg border transition-all ${
           dropTargetActive
-            ? 'border-blue-500 bg-blue-500/10'
+            ? 'border-info bg-info/10'
             : syntaxError && text.length > 0
-            ? 'border-red-500/50 bg-black hover:border-red-500/70'
-            : 'border-zinc-700 bg-black hover:border-zinc-600'
+            ? 'border-destructive/50 bg-card hover:border-destructive/70'
+            : 'border-input bg-card hover:border-input'
         }`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -249,18 +249,18 @@ export function MagicInput() {
             onSelect={(e) => setCursorPos(e.currentTarget.selectionStart || 0)}
             placeholder={canWrite ? "Type a rule... (e.g., ClaimAmount > 10000)" : "Read-only access for client users."}
             disabled={!canWrite}
-            className={`relative w-full bg-transparent outline-none text-sm placeholder:text-zinc-600 ${!canWrite ? 'cursor-not-allowed' : ''}`}
+            className={`relative w-full bg-transparent outline-none text-sm placeholder:text-muted-foreground ${!canWrite ? 'cursor-not-allowed' : ''}`}
             style={{
               fontFamily: 'JetBrains Mono, Consolas, monospace',
               color: tokens.length > 0 ? 'transparent' : 'inherit',
-              caretColor: '#a1a1aa',
+              caretColor: 'var(--color-muted-foreground)',
             }}
             autoComplete="off"
             spellCheck={false}
           />
         </div>
 
-        {isLoading && <Loader2 className="h-4 w-4 text-zinc-500 animate-spin mr-2" />}
+        {isLoading && <Loader2 className="h-4 w-4 text-muted-foreground animate-spin mr-2" />}
 
         {/* Effect indicator - clickable to toggle */}
         <button
@@ -269,8 +269,8 @@ export function MagicInput() {
           disabled={!datasetId || !canWrite}
           className={`px-2 py-0.5 rounded text-[10px] font-medium mr-2 transition-colors cursor-pointer hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed ${
             currentEffect === 'high'
-              ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30'
-              : 'bg-amber-500/20 text-amber-400 hover:bg-amber-500/30'
+              ? 'bg-destructive/20 text-destructive hover:bg-destructive/30'
+              : 'bg-warning/20 text-warning hover:bg-warning/30'
           }`}
           title={canWrite ? "Click to toggle between High and Moderate risk" : "Read-only access"}
         >
@@ -281,13 +281,13 @@ export function MagicInput() {
         {canCommit && isValidSyntax && canWrite ? (
           <button
             onClick={() => commitRule()}
-            className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium bg-white text-black rounded hover:bg-zinc-200 transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
           >
             Add
             <CornerDownLeft className="h-3 w-3" />
           </button>
         ) : (
-          <div className="flex items-center gap-1 px-3 py-1.5 text-xs text-zinc-500">
+          <div className="flex items-center gap-1 px-3 py-1.5 text-xs text-muted-foreground">
             <CornerDownLeft className="h-3 w-3" />
           </div>
         )}

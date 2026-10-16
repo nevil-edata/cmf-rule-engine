@@ -388,7 +388,7 @@ describe('AdminLogs', () => {
       expect(clickSpy).toHaveBeenCalledOnce();
 
       // Verify the blob contains CSV headers
-      const blobArg = (mockCreateObjectURL as unknown as { calls: Blob[][] }).calls[0]?.[0];
+      const blobArg = (mockCreateObjectURL.mock.calls[0] as unknown as Blob[] | undefined)?.[0];
       const csvText = blobArg instanceof Blob ? await blobArg.text() : "";
       expect(csvText).toContain('Time');
       expect(csvText).toContain('Action');
@@ -412,7 +412,7 @@ describe('AdminLogs', () => {
       const exportButton = screen.getByRole('button', { name: /export csv/i });
       await user.click(exportButton);
 
-      const blobArg = (mockCreateObjectURL as unknown as { calls: Blob[][] }).calls[0]?.[0];
+      const blobArg = (mockCreateObjectURL.mock.calls[0] as unknown as Blob[] | undefined)?.[0];
       const csvText = blobArg instanceof Blob ? await blobArg.text() : "";
       // All 3 mock entries should appear
       expect(csvText).toContain('create_company');

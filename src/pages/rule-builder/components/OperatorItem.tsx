@@ -48,16 +48,16 @@ export function OperatorItem({ operator, disabled }: OperatorItemProps) {
       className={`flex items-center gap-2 px-2 py-1.5 rounded transition-colors group select-none ${
         disabled
           ? 'opacity-50 cursor-not-allowed'
-          : 'cursor-grab hover:bg-zinc-800'
+          : 'cursor-grab hover:bg-muted'
       }`}
       title={operator.name}
     >
       <GripVertical
-        className={`h-3 w-3 text-zinc-600 flex-shrink-0 transition-opacity ${
+        className={`h-3 w-3 text-muted-foreground flex-shrink-0 transition-opacity ${
           disabled ? 'opacity-0' : 'opacity-0 group-hover:opacity-100'
         }`}
       />
-      <span className="text-xs text-zinc-300 flex-1">{operator.name}</span>
+      <span className="text-xs text-foreground/80 flex-1">{operator.name}</span>
     </div>
   );
 }

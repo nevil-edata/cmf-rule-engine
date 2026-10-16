@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useSetAtom } from 'jotai';
+import { headerBreadcrumbsAtom } from '@/store/atoms/header';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -44,6 +46,18 @@ export default function DatasetDetail() {
     },
     () => loadPreview(0)
   );
+
+  const setBreadcrumbs = useSetAtom(headerBreadcrumbsAtom);
+  const datasetLabel = dataset ? dataset.nickname || dataset.fileName || `Dataset #${dataset.id}` : null;
+  useEffect(() => {
+    if (!datasetLabel) return;
+    setBreadcrumbs([
+      { label: 'Home', href: '/' },
+      { label: 'Datasets', href: '/datasets' },
+      { label: datasetLabel },
+    ]);
+    return () => setBreadcrumbs([]);
+  }, [datasetLabel, setBreadcrumbs]);
 
   const handleSave = async () => {
     if (!validate()) return;

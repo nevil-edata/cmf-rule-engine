@@ -56,7 +56,7 @@ export function RequestSlotsDialog({ isOpen, onClose, onSuccess, hasPending }: R
         <DialogHeader>
           <DialogTitle>Request Additional Slots</DialogTitle>
         </DialogHeader>
-        <p className="text-sm text-zinc-400">Submit a slot request for admin review.</p>
+        <p className="text-sm text-muted-foreground">Submit a slot request for admin review.</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -70,16 +70,16 @@ export function RequestSlotsDialog({ isOpen, onClose, onSuccess, hasPending }: R
               onChange={(e) => setSlotsCount(e.target.value)}
               disabled={loading || hasPending}
               required
-              className="bg-zinc-900 border-zinc-800 text-zinc-50"
+              className="bg-card border-border text-foreground"
             />
             {hasPending && (
-              <p className="text-xs text-red-500">
+              <p className="text-xs text-destructive">
                 Disabled: A pending slot request already exists.
               </p>
             )}
           </div>
 
-          {error && <div className="text-sm text-red-500">{error}</div>}
+          {error && <div className="text-sm text-destructive">{error}</div>}
 
           <DialogFooter>
             <Button
@@ -87,14 +87,14 @@ export function RequestSlotsDialog({ isOpen, onClose, onSuccess, hasPending }: R
               variant="outline"
               onClick={onClose}
               disabled={loading}
-              className="border-zinc-800 text-zinc-400 hover:text-zinc-50"
+              className="border-border text-muted-foreground hover:text-foreground"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={loading || hasPending}
-              className="bg-zinc-50 text-zinc-950 hover:bg-zinc-200"
+              className="bg-muted/50 text-foreground hover:bg-muted"
             >
               {loading ? 'Submitting...' : 'Submit Request'}
             </Button>

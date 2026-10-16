@@ -117,7 +117,7 @@ export default function RuleBuilder() {
   // Show loading state while loading ruleset
   if (loadingRuleset) {
     return (
-      <div className="flex items-center justify-center h-[calc(100vh-64px)]" style={{ backgroundColor: '#09090b' }}>
+      <div className="flex items-center justify-center h-[calc(100vh-64px)]" style={{ backgroundColor: 'var(--color-background)' }}>
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     );
@@ -126,14 +126,14 @@ export default function RuleBuilder() {
   // Show error state
   if (loadError) {
     return (
-      <div className="flex items-center justify-center h-[calc(100vh-64px)] text-destructive" style={{ backgroundColor: '#09090b' }}>
+      <div className="flex items-center justify-center h-[calc(100vh-64px)] text-destructive" style={{ backgroundColor: 'var(--color-background)' }}>
         <p>Error loading ruleset: {loadError}</p>
       </div>
     );
   }
 
   return (
-    <div className="flex h-full" style={{ backgroundColor: '#09090b' }}>
+    <div className="flex h-full" style={{ backgroundColor: 'var(--color-background)' }}>
       <PanelGroup direction="horizontal" className="h-full">
         {/* Left Panel: Field Palette */}
         <Panel defaultSize={18} minSize={14} maxSize={25} className="h-full">
@@ -142,7 +142,7 @@ export default function RuleBuilder() {
           </div>
         </Panel>
 
-        <PanelResizeHandle className="w-[2px] bg-zinc-800 hover:bg-blue-500 transition-colors cursor-col-resize" />
+        <PanelResizeHandle className="w-[2px] bg-muted hover:bg-info transition-colors cursor-col-resize" />
 
         {/* Center Panel: Logic Canvas */}
         <Panel defaultSize={64} minSize={40} className="h-full">
@@ -151,7 +151,7 @@ export default function RuleBuilder() {
           </div>
         </Panel>
 
-        <PanelResizeHandle className="w-[2px] bg-zinc-800 hover:bg-blue-500 transition-colors cursor-col-resize" />
+        <PanelResizeHandle className="w-[2px] bg-muted hover:bg-info transition-colors cursor-col-resize" />
 
         {/* Right Panel: Operators */}
         <Panel defaultSize={18} minSize={14} maxSize={25} className="h-full">

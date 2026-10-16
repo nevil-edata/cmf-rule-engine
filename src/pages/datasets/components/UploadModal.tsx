@@ -165,7 +165,7 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
         <div className="space-y-4">
           {/* File Dropzone */}
           <div>
-            <Label className="text-xs text-zinc-400 mb-2 block">
+            <Label className="text-xs text-muted-foreground mb-2 block">
               Dataset File
             </Label>
             <div
@@ -173,14 +173,14 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
               className={`flex min-h-[120px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-4 transition-colors ${
                 isDragActive
                   ? 'border-primary bg-primary/5'
-                  : 'border-zinc-700 hover:border-primary/50'
+                  : 'border-input hover:border-primary/50'
               }`}
             >
               <input {...getInputProps()} />
               <FileUp
-                className={`h-10 w-10 ${isDragActive ? 'text-primary' : 'text-zinc-500'}`}
+                className={`h-10 w-10 ${isDragActive ? 'text-primary' : 'text-muted-foreground'}`}
               />
-              <p className="mt-2 text-center text-sm text-zinc-400">
+              <p className="mt-2 text-center text-sm text-muted-foreground">
                 {file ? (
                   <span className="font-medium text-foreground">{file.name}</span>
                 ) : isDragActive ? (
@@ -190,18 +190,18 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
                 )}
               </p>
               {file ? (
-                <p className="mt-1 text-xs text-zinc-500">
+                <p className="mt-1 text-xs text-muted-foreground">
                   {(file.size / 1024 / 1024).toFixed(2)} MB
                 </p>
               ) : (
                 <div className="mt-2 flex gap-2">
-                  <span className="border border-zinc-700 text-zinc-400 text-xs px-2 py-0.5 rounded">
+                  <span className="border border-input text-muted-foreground text-xs px-2 py-0.5 rounded">
                     CSV
                   </span>
-                  <span className="border border-zinc-700 text-zinc-400 text-xs px-2 py-0.5 rounded">
+                  <span className="border border-input text-muted-foreground text-xs px-2 py-0.5 rounded">
                     XLSX
                   </span>
-                  <span className="border border-zinc-700 text-zinc-400 text-xs px-2 py-0.5 rounded">
+                  <span className="border border-input text-muted-foreground text-xs px-2 py-0.5 rounded">
                     PARQUET
                   </span>
                 </div>
@@ -211,7 +211,7 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
 
           {/* Claim Category Selector */}
           <div>
-            <Label className="text-xs text-zinc-400 mb-2 block">
+            <Label className="text-xs text-muted-foreground mb-2 block">
               Claim Category *
             </Label>
             <div className="flex gap-3">
@@ -221,7 +221,7 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
                 className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 transition-all ${
                   claimCategory === 'motor'
                     ? 'border-primary bg-primary/10 text-primary'
-                    : 'border-zinc-700 hover:border-zinc-600 text-zinc-400'
+                    : 'border-input hover:border-input text-muted-foreground'
                 }`}
               >
                 <Car className="h-5 w-5" />
@@ -233,7 +233,7 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
                 className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 transition-all ${
                   claimCategory === 'medical'
                     ? 'border-primary bg-primary/10 text-primary'
-                    : 'border-zinc-700 hover:border-zinc-600 text-zinc-400'
+                    : 'border-input hover:border-input text-muted-foreground'
                 }`}
               >
                 <Stethoscope className="h-5 w-5" />
@@ -244,7 +244,7 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
 
           {/* Granularity Selector */}
           <div>
-            <Label className="text-xs text-zinc-400 mb-2 block">
+            <Label className="text-xs text-muted-foreground mb-2 block">
               Data Granularity *
             </Label>
             <div className="flex gap-2">
@@ -254,7 +254,7 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
                 className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg border-2 transition-all ${
                   granularity === 'claim'
                     ? 'border-primary bg-primary/10 text-primary'
-                    : 'border-zinc-700 hover:border-zinc-600 text-zinc-400'
+                    : 'border-input hover:border-input text-muted-foreground'
                 }`}
               >
                 <FileText className="h-4 w-4" />
@@ -266,7 +266,7 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
                 className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg border-2 transition-all ${
                   granularity === 'invoice'
                     ? 'border-primary bg-primary/10 text-primary'
-                    : 'border-zinc-700 hover:border-zinc-600 text-zinc-400'
+                    : 'border-input hover:border-input text-muted-foreground'
                 }`}
               >
                 <Receipt className="h-4 w-4" />
@@ -278,7 +278,7 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
                 className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg border-2 transition-all ${
                   granularity === 'item'
                     ? 'border-primary bg-primary/10 text-primary'
-                    : 'border-zinc-700 hover:border-zinc-600 text-zinc-400'
+                    : 'border-input hover:border-input text-muted-foreground'
                 }`}
               >
                 <Package className="h-4 w-4" />
@@ -290,7 +290,7 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
           {/* Form Fields - 2 Column Grid */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="nickname" className="text-xs text-zinc-400">
+              <Label htmlFor="nickname" className="text-xs text-muted-foreground">
                 Dataset Nickname
               </Label>
               <Input
@@ -298,15 +298,15 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 placeholder="Optional"
-                className="h-8 bg-black border-zinc-800 text-sm mt-1"
+                className="h-8 bg-card border-border text-sm mt-1"
               />
             </div>
             <div>
-              <Label htmlFor="insurance-company" className="text-xs text-zinc-400">
+              <Label htmlFor="insurance-company" className="text-xs text-muted-foreground">
                 Insurance Company *
               </Label>
               {loadingCompanies ? (
-                <div className="h-8 flex items-center text-sm text-zinc-500 mt-1">
+                <div className="h-8 flex items-center text-sm text-muted-foreground mt-1">
                   <Loader2 className="h-3 w-3 animate-spin mr-2" />
                   Loading companies...
                 </div>
@@ -322,12 +322,12 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
                       label: c.name
                     }))
                   ]}
-                  className="h-8 bg-black border-zinc-800 text-sm mt-1"
+                  className="h-8 bg-card border-border text-sm mt-1"
                 />
               )}
             </div>
             <div>
-              <Label htmlFor="country" className="text-xs text-zinc-400">
+              <Label htmlFor="country" className="text-xs text-muted-foreground">
                 Country/Region *
               </Label>
               <Input
@@ -335,19 +335,19 @@ export default function UploadModal({ open, onClose, onSuccess }: UploadModalPro
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
                 placeholder="e.g., Egypt, UAE"
-                className="h-8 bg-black border-zinc-800 text-sm mt-1"
+                className="h-8 bg-card border-border text-sm mt-1"
                 required
               />
             </div>
             <div>
-              <Label htmlFor="email" className="text-xs text-zinc-400">
+              <Label htmlFor="email" className="text-xs text-muted-foreground">
                 Uploader Email
               </Label>
               <Input
                 id="email"
                 value={user?.email || ''}
                 disabled
-                className="h-8 bg-zinc-900 border-zinc-800 text-sm mt-1 text-zinc-500"
+                className="h-8 bg-card border-border text-sm mt-1 text-muted-foreground"
               />
             </div>
           </div>

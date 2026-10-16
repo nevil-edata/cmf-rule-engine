@@ -10,15 +10,15 @@ interface AnalysisModeSelectorProps {
 
 export function AnalysisModeSelector({ value, onChange, disabled }: AnalysisModeSelectorProps) {
   return (
-    <div className="flex gap-1 p-1 rounded-lg" style={{ backgroundColor: '#27272a' }}>
+    <div className="flex gap-1 p-1 rounded-lg" style={{ backgroundColor: 'var(--color-muted)' }}>
       <button
         onClick={() => onChange('trees')}
         disabled={disabled}
         className={cn(
           'flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md text-xs font-medium transition-colors',
           value === 'trees'
-            ? 'bg-zinc-800 text-zinc-100 shadow-sm'
-            : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50',
+            ? 'bg-muted text-foreground shadow-sm'
+            : 'text-muted-foreground hover:text-foreground hover:bg-muted/50',
           disabled && 'opacity-50 cursor-not-allowed'
         )}
       >
@@ -31,8 +31,8 @@ export function AnalysisModeSelector({ value, onChange, disabled }: AnalysisMode
         className={cn(
           'flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md text-xs font-medium transition-colors',
           value === 'rules'
-            ? 'bg-zinc-800 text-zinc-100 shadow-sm'
-            : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50',
+            ? 'bg-muted text-foreground shadow-sm'
+            : 'text-muted-foreground hover:text-foreground hover:bg-muted/50',
           disabled && 'opacity-50 cursor-not-allowed'
         )}
       >

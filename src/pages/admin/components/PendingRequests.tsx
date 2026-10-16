@@ -78,7 +78,7 @@ export function PendingRequests({ requests, onUpdate }: PendingRequestsProps) {
                 <Button
                   size="sm"
                   variant="ghost"
-                  className="h-8 w-8 p-0 hover:bg-green-900/20 hover:text-green-400"
+                  className="h-8 w-8 p-0 hover:bg-success/20 hover:text-success"
                   onClick={() => handleApprove(req.id)}
                   disabled={processingId === req.id}
                   title="Approve"
@@ -88,7 +88,7 @@ export function PendingRequests({ requests, onUpdate }: PendingRequestsProps) {
                 <Button
                   size="sm"
                   variant="ghost"
-                  className="h-8 w-8 p-0 hover:bg-red-900/20 hover:text-red-400"
+                  className="h-8 w-8 p-0 hover:bg-destructive/20 hover:text-destructive"
                   onClick={() => handleDeny(req.id)}
                   disabled={processingId === req.id}
                   title="Deny"

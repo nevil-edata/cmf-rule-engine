@@ -14,6 +14,7 @@ import { getTrees } from '@/lib/db/operations';
 import { useAuth } from '@/lib/auth/context';
 import type { ClaimData } from '@/lib/types/claim';
 import type { Tree } from '@/lib/types/tree';
+import { Illustration } from '@/components/brand/Illustration';
 import {
   headerBreadcrumbsAtom,
   headerActionsAtom,
@@ -117,7 +118,7 @@ export default function VisualizeTrace() {
             onClick={handleExport}
             disabled={isExporting}
             className="gap-2"
-            style={{ backgroundColor: '#3b82f6', color: '#ffffff' }}
+            style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-primary-foreground)' }}
           >
             {isExporting ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -136,9 +137,9 @@ export default function VisualizeTrace() {
     return (
       <div
         className="h-full w-full flex items-center justify-center"
-        style={{ backgroundColor: '#09090b' }}
+        style={{ backgroundColor: 'var(--color-background)' }}
       >
-        <Loader2 className="h-8 w-8 animate-spin" style={{ color: '#a1a1aa' }} />
+        <Loader2 className="h-8 w-8 animate-spin" style={{ color: 'var(--color-muted-foreground)' }} />
       </div>
     );
   }
@@ -148,13 +149,13 @@ export default function VisualizeTrace() {
     return (
       <div
         className="h-full w-full flex flex-col items-center justify-center gap-4"
-        style={{ backgroundColor: '#09090b' }}
+        style={{ backgroundColor: 'var(--color-background)' }}
       >
-        <p style={{ color: '#71717a' }}>No trees available. Create a tree first.</p>
+        <p style={{ color: 'var(--color-text-muted)' }}>No trees available. Create a tree first.</p>
         {isAdmin && (
           <Button
             onClick={() => navigate('/generate-tree')}
-            style={{ backgroundColor: '#fafafa', color: '#09090b' }}
+            style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-primary-foreground)' }}
           >
             Create Tree
           </Button>
@@ -164,11 +165,11 @@ export default function VisualizeTrace() {
   }
 
   return (
-    <div className="flex h-full" style={{ backgroundColor: '#09090b' }}>
+    <div className="flex h-full" style={{ backgroundColor: 'var(--color-background)' }}>
       {/* Left Panel - Inspector */}
       <aside
         className="w-[360px] flex-shrink-0 border-r flex flex-col overflow-hidden"
-        style={{ borderColor: '#27272a', backgroundColor: '#18181b' }}
+        style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)' }}
       >
         {/* Tree Selector */}
         <TreeSelector
@@ -183,7 +184,7 @@ export default function VisualizeTrace() {
             <ClaimForm claim={claim} onChange={setClaim} features={features} />
           ) : (
             <div className="p-4">
-              <p className="text-sm" style={{ color: '#71717a' }}>
+              <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
                 Select a tree to start evaluation.
               </p>
             </div>
@@ -207,16 +208,19 @@ export default function VisualizeTrace() {
             <div
               className="h-full flex items-center justify-center"
               style={{
-                backgroundColor: '#09090b',
-                backgroundImage: 'radial-gradient(#27272a 1px, transparent 1px)',
+                backgroundColor: 'var(--color-background)',
+                backgroundImage: 'radial-gradient(var(--color-border) 1px, transparent 1px)',
                 backgroundSize: '24px 24px',
               }}
             >
-              <p className="text-sm" style={{ color: '#71717a' }}>
-                {selectedTree
-                  ? 'Enter a claim number to see the evaluation trace'
-                  : 'Select a tree and enter claim data'}
-              </p>
+              <div className="flex flex-col items-center gap-4">
+                <Illustration name="car" className="h-36 w-auto" />
+                <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                  {selectedTree
+                    ? 'Enter a claim number to see the evaluation trace'
+                    : 'Select a tree and enter claim data'}
+                </p>
+              </div>
             </div>
           )}
         </div>

@@ -1,4 +1,5 @@
 import type { Tree } from '@/lib/types/tree';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 
 interface TreeSelectorProps {
   trees: Tree[];
@@ -8,34 +9,25 @@ interface TreeSelectorProps {
 
 export function TreeSelector({ trees, selectedTreeId, onSelect }: TreeSelectorProps) {
   return (
-    <div className="p-4 border-b" style={{ borderColor: '#27272a' }}>
+    <div className="p-4 border-b" style={{ borderColor: 'var(--color-border)' }}>
       <label
         className="text-[10px] font-semibold uppercase tracking-wider block mb-2"
-        style={{ color: '#71717a' }}
+        style={{ color: 'var(--color-text-muted)' }}
         htmlFor="tree-select"
       >
         Decision Tree
       </label>
-      <select
+      <SearchableSelect
         id="tree-select"
-        className="w-full h-8 px-3 rounded text-sm focus:outline-none focus:ring-1 focus:ring-zinc-600 cursor-pointer"
-        style={{
-          backgroundColor: '#000000',
-          border: '1px solid #3f3f46',
-          color: '#fafafa',
-        }}
+        className="h-8"
         value={selectedTreeId || ''}
-        onChange={(e) => onSelect(e.target.value)}
-      >
-        <option value="">Select a tree...</option>
-        {trees.map((tree) => (
-          <option key={tree.id} value={tree.id}>
-            {tree.name} ({tree.treeType})
-          </option>
-        ))}
-      </select>
+        onChange={onSelect}
+        placeholder="Select a tree..."
+        searchPlaceholder="Type a tree name…"
+        options={trees.map((tree) => ({ value: tree.id, label: tree.name, hint: tree.treeType }))}
+      />
       {trees.length === 0 && (
-        <p className="text-xs mt-2" style={{ color: '#71717a' }}>
+        <p className="text-xs mt-2" style={{ color: 'var(--color-text-muted)' }}>
           No trees found. Create a tree first.
         </p>
       )}

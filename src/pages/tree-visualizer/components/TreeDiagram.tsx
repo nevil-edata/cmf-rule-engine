@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { getLeafColor } from '@/lib/utils/leafColor';
 import { isLeafNode, isDecisionNode } from '@/lib/types/tree';
 import type { TreeNode, DecisionNode } from '@/lib/types/tree';
 import {
@@ -22,10 +23,7 @@ interface NodePosition {
 }
 
 function getColorForValue(value: number, min: number, max: number): string {
-  if (max === min) return `hsl(60, 70%, 45%)`;
-  const normalized = (value - min) / (max - min);
-  const hue = (1 - normalized) * 120; // 0 (red) to 120 (green)
-  return `hsl(${hue}, 70%, 45%)`;
+  return getLeafColor(value, min, max);
 }
 
 export function TreeDiagram({ root, title }: TreeDiagramProps) {
@@ -70,12 +68,12 @@ export function TreeDiagram({ root, title }: TreeDiagramProps) {
   const height = maxY - minY;
 
   return (
-    <div className="relative overflow-hidden rounded-[2rem] border border-white/60 bg-white/75 backdrop-blur p-8 shadow-xl">
+    <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-8 shadow-[var(--shadow-card)]">
       <div className="pointer-events-none absolute -right-24 top-[-90px] h-56 w-56 rounded-full bg-primary/20 blur-3xl" />
-      <div className="pointer-events-none absolute -left-16 bottom-[-120px] h-64 w-64 rounded-full bg-sky-200/40 blur-3xl" />
+      <div className="pointer-events-none absolute -left-16 bottom-[-120px] h-64 w-64 rounded-full bg-info/15 blur-3xl" />
 
       <div className="relative">
-        <h3 className="text-xl font-semibold text-slate-900 mb-6">{title}</h3>
+        <h3 className="text-xl font-semibold text-foreground mb-6">{title}</h3>
 
         <div className="overflow-x-auto">
           <svg
@@ -110,7 +108,7 @@ export function TreeDiagram({ root, title }: TreeDiagramProps) {
                           y1={pos.y + 18}
                           x2={pos.x}
                           y2={pos.y + 75}
-                          stroke="#18181b"
+                          stroke="var(--color-card)"
                           strokeWidth="2"
                         />
                         {/* Horizontal line to left */}
@@ -119,7 +117,7 @@ export function TreeDiagram({ root, title }: TreeDiagramProps) {
                           y1={pos.y + 75}
                           x2={leftChild.x}
                           y2={pos.y + 75}
-                          stroke="#18181b"
+                          stroke="var(--color-card)"
                           strokeWidth="2"
                         />
                         {/* Vertical line up to child */}
@@ -128,7 +126,7 @@ export function TreeDiagram({ root, title }: TreeDiagramProps) {
                           y1={pos.y + 75}
                           x2={leftChild.x}
                           y2={leftChild.y - 18}
-                          stroke="#18181b"
+                          stroke="var(--color-card)"
                           strokeWidth="2"
                         />
                         {/* Label */}
@@ -136,7 +134,7 @@ export function TreeDiagram({ root, title }: TreeDiagramProps) {
                           x={leftChild.x}
                           y={pos.y + 65}
                           textAnchor="middle"
-                          fill="#0f172a"
+                          fill="var(--color-foreground)"
                           fontSize="12"
                           fontWeight="500"
                         >
@@ -152,7 +150,7 @@ export function TreeDiagram({ root, title }: TreeDiagramProps) {
                           y1={pos.y + 18}
                           x2={pos.x}
                           y2={pos.y + 75}
-                          stroke="#18181b"
+                          stroke="var(--color-card)"
                           strokeWidth="2"
                         />
                         {/* Horizontal line to right */}
@@ -161,7 +159,7 @@ export function TreeDiagram({ root, title }: TreeDiagramProps) {
                           y1={pos.y + 75}
                           x2={rightChild.x}
                           y2={pos.y + 75}
-                          stroke="#18181b"
+                          stroke="var(--color-card)"
                           strokeWidth="2"
                         />
                         {/* Vertical line up to child */}
@@ -170,7 +168,7 @@ export function TreeDiagram({ root, title }: TreeDiagramProps) {
                           y1={pos.y + 75}
                           x2={rightChild.x}
                           y2={rightChild.y - 18}
-                          stroke="#18181b"
+                          stroke="var(--color-card)"
                           strokeWidth="2"
                         />
                         {/* Label */}
@@ -178,7 +176,7 @@ export function TreeDiagram({ root, title }: TreeDiagramProps) {
                           x={rightChild.x}
                           y={pos.y + 65}
                           textAnchor="middle"
-                          fill="#0f172a"
+                          fill="var(--color-foreground)"
                           fontSize="12"
                           fontWeight="500"
                         >
@@ -231,7 +229,7 @@ export function TreeDiagram({ root, title }: TreeDiagramProps) {
                 const featureLabel = parsed ? parsed.feature : decisionNode.condition;
 
                 // Root nodes get special styling
-                const bgColor = isRoot ? '#e0e7ff' : '#f4f4f5';
+                const bgColor = isRoot ? 'var(--color-secondary)' : 'var(--color-muted)';
 
                 return (
                   <g key={`node-${idx}`}>
@@ -242,14 +240,14 @@ export function TreeDiagram({ root, title }: TreeDiagramProps) {
                       height={36}
                       rx={4}
                       fill={bgColor}
-                      stroke="#e4e4e7"
+                      stroke="var(--color-border)"
                       strokeWidth="1"
                     />
                     <text
                       x={pos.x}
                       y={pos.y + 5}
                       textAnchor="middle"
-                      fill="#0f172a"
+                      fill="var(--color-foreground)"
                       fontSize="12"
                       fontWeight={isRoot ? '600' : '500'}
                     >

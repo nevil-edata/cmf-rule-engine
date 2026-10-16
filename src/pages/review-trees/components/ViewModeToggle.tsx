@@ -9,7 +9,7 @@ interface ViewModeToggleProps {
 
 export function ViewModeToggle({ mode, onChange }: ViewModeToggleProps) {
   return (
-    <div className="inline-flex items-center gap-1 rounded-lg border border-zinc-800 bg-zinc-900 p-1">
+    <div className="inline-flex items-center gap-1 rounded-xl border border-border bg-card p-1">
       <Button
         variant="ghost"
         size="sm"
@@ -17,8 +17,8 @@ export function ViewModeToggle({ mode, onChange }: ViewModeToggleProps) {
         className={cn(
           'gap-2 px-3',
           mode === 'list'
-            ? 'bg-zinc-800 text-white'
-            : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'
+            ? 'bg-secondary text-secondary-foreground hover:bg-secondary'
+            : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
         )}
       >
         <List className="h-4 w-4" />
@@ -31,8 +31,8 @@ export function ViewModeToggle({ mode, onChange }: ViewModeToggleProps) {
         className={cn(
           'gap-2 px-3',
           mode === 'grid'
-            ? 'bg-zinc-800 text-white'
-            : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'
+            ? 'bg-secondary text-secondary-foreground hover:bg-secondary'
+            : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
         )}
       >
         <LayoutGrid className="h-4 w-4" />

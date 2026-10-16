@@ -29,7 +29,7 @@ export function SaveDialog({ onSave, onCancel, isSaving, error }: SaveDialogProp
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-navy-950/60 backdrop-blur-sm flex items-center justify-center z-50">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Save Decision Tree</CardTitle>

@@ -30,7 +30,7 @@ export function CompanyRow({ company, onEdit, onToggleActive, toggling }: Compan
         <span
           className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
           style={{
-            backgroundColor: company.isActive ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+            backgroundColor: company.isActive ? 'color-mix(in srgb, var(--color-success) 12%, transparent)' : 'color-mix(in srgb, var(--color-destructive) 12%, transparent)',
             color: company.isActive ? 'var(--color-status-green)' : 'var(--color-status-red)',
           }}
         >

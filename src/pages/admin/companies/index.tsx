@@ -3,11 +3,11 @@ import { useSetAtom } from 'jotai';
 import {
   Building2,
   Plus,
-  Search,
   Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { PageHeader } from '@/components/shared/Layout/PageHeader';
+import { SuggestInput } from '@/components/ui/suggest-input';
 import { Card, CardContent } from '@/components/ui/card';
 import { headerBreadcrumbsAtom } from '@/store/atoms/header';
 import {
@@ -116,31 +116,28 @@ export default function AdminCompanies() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>
-            Companies
-          </h1>
-          <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            Manage client companies and their access
-          </p>
-        </div>
-        <Button size="sm" className="gap-2" onClick={() => setCreateOpen(true)}>
-          <Plus className="h-4 w-4" />
-          New Company
-        </Button>
-      </div>
+      <PageHeader
+        eyebrow="Administration"
+        title="Companies"
+        description="Manage client companies and their access"
+        actions={
+          <>
+  <Button size="sm" className="gap-2" onClick={() => setCreateOpen(true)}>
+            <Plus className="h-4 w-4" />
+            New Company
+          </Button>
+          </>
+        }
+      />
 
       {/* Search */}
-      <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" style={{ color: 'var(--color-text-muted)' }} />
-        <Input
-          placeholder="Search companies..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="pl-9"
-        />
-      </div>
+      <SuggestInput
+        className="max-w-sm"
+        placeholder="Search companies..."
+        value={search}
+        onValueChange={setSearch}
+        suggestions={companies.map((c) => c.name)}
+      />
 
       {/* Table */}
       {loading ? (

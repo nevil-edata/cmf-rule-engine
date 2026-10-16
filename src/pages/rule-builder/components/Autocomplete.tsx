@@ -24,10 +24,10 @@ const DATA_TYPE_ICONS: Record<DimensionDataType, typeof Hash> = {
 };
 
 const DATA_TYPE_COLORS: Record<DimensionDataType, string> = {
-  Number: 'text-emerald-400',
-  String: 'text-amber-300',
-  Date: 'text-blue-400',
-  Boolean: 'text-purple-400',
+  Number: 'text-success',
+  String: 'text-warning',
+  Date: 'text-info',
+  Boolean: 'text-info',
 };
 
 export function Autocomplete({ suggestions, selectedIndex, onSelect, context }: AutocompleteProps) {
@@ -35,13 +35,13 @@ export function Autocomplete({ suggestions, selectedIndex, onSelect, context }: 
     <div
       className="absolute bottom-full left-0 right-0 mb-2 max-h-64 overflow-y-auto rounded-lg border shadow-lg z-50"
       style={{
-        borderColor: '#3f3f46',
-        backgroundColor: '#18181b',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
+        borderColor: 'var(--color-input)',
+        backgroundColor: 'var(--color-card)',
+        boxShadow: 'var(--shadow-pop)',
       }}
     >
       {/* Context header */}
-      <div className="px-3 py-2 border-b text-[10px] uppercase tracking-wider text-zinc-500" style={{ borderColor: '#27272a' }}>
+      <div className="px-3 py-2 border-b text-[10px] uppercase tracking-wider text-muted-foreground" style={{ borderColor: 'var(--color-border)' }}>
         {context === 'field' && 'Select a field'}
         {context === 'operator' && 'Select an operator'}
         {context === 'value' && 'Select a value'}
@@ -51,7 +51,7 @@ export function Autocomplete({ suggestions, selectedIndex, onSelect, context }: 
       {/* Suggestions */}
       <div className="py-1">
         {suggestions.length === 0 ? (
-          <div className="px-3 py-2 text-sm text-zinc-500 italic">
+          <div className="px-3 py-2 text-sm text-muted-foreground italic">
             No matches found
           </div>
         ) : (
@@ -60,7 +60,7 @@ export function Autocomplete({ suggestions, selectedIndex, onSelect, context }: 
 
             // Get appropriate icon
             let Icon = TYPE_ICONS[suggestion.type];
-            let iconColor = 'text-zinc-500';
+            let iconColor = 'text-muted-foreground';
 
             if (suggestion.type === 'field' && suggestion.dataType) {
               Icon = DATA_TYPE_ICONS[suggestion.dataType];
@@ -71,7 +71,7 @@ export function Autocomplete({ suggestions, selectedIndex, onSelect, context }: 
               <button
                 key={`${suggestion.type}-${suggestion.value}-${index}`}
                 className={`w-full flex items-center gap-3 px-3 py-2 text-left text-sm transition-colors ${
-                  isSelected ? 'bg-zinc-800' : 'hover:bg-zinc-800/50'
+                  isSelected ? 'bg-muted' : 'hover:bg-muted/50'
                 }`}
                 onClick={() => onSelect(suggestion.value)}
                 onMouseEnter={() => {}}
@@ -80,14 +80,14 @@ export function Autocomplete({ suggestions, selectedIndex, onSelect, context }: 
 
                 <div className="flex-1 min-w-0">
                   <span
-                    className="text-zinc-100"
+                    className="text-foreground"
                     style={{ fontFamily: suggestion.type === 'operator' ? 'JetBrains Mono, monospace' : 'inherit' }}
                   >
                     {suggestion.displayValue}
                   </span>
 
                   {suggestion.description && (
-                    <span className="text-xs text-zinc-500 ml-2">{suggestion.description}</span>
+                    <span className="text-xs text-muted-foreground ml-2">{suggestion.description}</span>
                   )}
                 </div>
 
@@ -104,13 +104,13 @@ export function Autocomplete({ suggestions, selectedIndex, onSelect, context }: 
       </div>
 
       {/* Keyboard hints */}
-      <div className="px-3 py-2 border-t flex items-center gap-4 text-[10px] text-zinc-600" style={{ borderColor: '#27272a' }}>
+      <div className="px-3 py-2 border-t flex items-center gap-4 text-[10px] text-muted-foreground" style={{ borderColor: 'var(--color-border)' }}>
         <span className="flex items-center gap-1">
-          <kbd className="px-1 py-0.5 bg-zinc-800 rounded text-zinc-400">Tab</kbd>
+          <kbd className="px-1 py-0.5 bg-muted rounded text-muted-foreground">Tab</kbd>
           <span>select</span>
         </span>
         <span className="flex items-center gap-1">
-          <kbd className="px-1 py-0.5 bg-zinc-800 rounded text-zinc-400">Esc</kbd>
+          <kbd className="px-1 py-0.5 bg-muted rounded text-muted-foreground">Esc</kbd>
           <span>dismiss</span>
         </span>
       </div>

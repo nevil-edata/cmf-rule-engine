@@ -9,6 +9,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/shared/Layout/PageHeader';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { headerBreadcrumbsAtom } from '@/store/atoms/header';
@@ -106,20 +107,19 @@ export default function AdminLogs() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>
-            Activity Logs
-          </h1>
-          <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            Audit trail of all admin actions ({total} total)
-          </p>
-        </div>
-        <Button variant="outline" size="sm" className="gap-2" onClick={exportCsv}>
-          <Download className="h-4 w-4" />
-          Export CSV
-        </Button>
-      </div>
+      <PageHeader
+        eyebrow="Audit trail"
+        title="Activity Logs"
+        description={`Audit trail of all admin actions (${total} total)`}
+        actions={
+          <>
+  <Button variant="outline" size="sm" className="gap-2" onClick={exportCsv}>
+            <Download className="h-4 w-4" />
+            Export CSV
+          </Button>
+          </>
+        }
+      />
 
       <div className="flex items-center gap-3">
         <div className="relative max-w-xs flex-1">
@@ -224,7 +224,7 @@ export default function AdminLogs() {
                       <tr className="group">
                         <td className="px-2 py-3">
                           <button
-                            className="flex h-5 w-5 items-center justify-center rounded hover:bg-zinc-800"
+                            className="flex h-5 w-5 items-center justify-center rounded hover:bg-muted"
                             onClick={() => setExpandedId(isExpanded ? null : entry.id)}
                             aria-label={isExpanded ? 'Collapse log details' : 'Expand log details'}
                           >

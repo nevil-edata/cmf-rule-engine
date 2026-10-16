@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { downloadAlignedDataset } from '@/lib/storage/helpers';
 import type { DatasetWithStatus } from '@/lib/db/operations';
 
-interface PreviewData {
+export interface PreviewData {
   headers: string[];
   rows: Record<string, string>[];
 }

@@ -25,11 +25,11 @@ export default function DatasetTableRow({ dataset, onDelete, isDeleting, canWrit
   const status = (dataset.uploadStatus?.status || 'ready') as 'uploading' | 'processing' | 'uploaded' | 'failed' | 'ready';
 
   return (
-    <tr className="border-b border-[var(--color-border-subtle)] hover:bg-zinc-900 transition-colors">
+    <tr className="border-b border-[var(--color-border-subtle)] hover:bg-card transition-colors">
       {/* NAME */}
       <td className="py-3 px-4">
         <div className="flex items-center gap-2">
-          <FileText className="h-4 w-4 text-zinc-400 flex-shrink-0" />
+          <FileText className="h-4 w-4 text-muted-foreground flex-shrink-0" />
           <span className="font-medium">
             {dataset.nickname || dataset.fileName || `Dataset #${dataset.id}`}
           </span>
@@ -37,7 +37,7 @@ export default function DatasetTableRow({ dataset, onDelete, isDeleting, canWrit
       </td>
 
       {/* DIMENSIONS */}
-      <td className="py-3 px-4 font-mono text-sm text-zinc-300">
+      <td className="py-3 px-4 font-mono text-sm text-foreground/80">
         {dataset.rows}R x {dataset.columns}C
       </td>
 
@@ -60,7 +60,7 @@ export default function DatasetTableRow({ dataset, onDelete, isDeleting, canWrit
       </td>
 
       {/* UPLOADED */}
-      <td className="py-3 px-4 font-mono text-sm text-zinc-300">
+      <td className="py-3 px-4 font-mono text-sm text-foreground/80">
         {formattedDate}
       </td>
 

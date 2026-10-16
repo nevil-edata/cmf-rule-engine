@@ -11,15 +11,15 @@ interface TreeInputProps {
 
 export function TreeInput({ value, onChange, error, isValid }: TreeInputProps) {
   return (
-    <div className="space-y-2">
+    <div className="flex h-full flex-col gap-2">
       <div className="flex items-center justify-between">
         <Label htmlFor="tree-input">FIGS Tree Format</Label>
         {value && (
           <div className="flex items-center gap-1.5 text-sm">
             {isValid ? (
               <>
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
-                <span className="text-green-600">Valid</span>
+                <CheckCircle2 className="h-4 w-4 text-success" />
+                <span className="text-success">Valid</span>
               </>
             ) : error ? (
               <>
@@ -36,7 +36,7 @@ export function TreeInput({ value, onChange, error, isValid }: TreeInputProps) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Paste your FIGS tree structure here...&#10;&#10;Example:&#10;feature <= 1.5 (Tree #0 root)&#10;&#9;Val: 0.212 (leaf)&#10;&#9;Val: 0.335 (leaf)"
-        className="font-mono text-sm min-h-[400px]"
+        className="min-h-24 flex-1 resize-none font-mono text-sm"
       />
 
       {error && (

@@ -44,13 +44,13 @@ export function TopPane({
   analysisMode,
 }: TopPaneProps) {
   return (
-    <div className="flex flex-col h-full" style={{ backgroundColor: '#09090b' }}>
+    <div className="flex flex-col h-full" style={{ backgroundColor: 'var(--color-background)' }}>
       {/* Header with toggle */}
       <div
         className="border-b px-6 py-3 flex items-center justify-between"
-        style={{ borderBottomWidth: '1px', borderColor: '#27272a', backgroundColor: '#18181b' }}
+        style={{ borderBottomWidth: '1px', borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)' }}
       >
-        <h3 className="text-sm font-semibold text-zinc-100">
+        <h3 className="text-sm font-semibold text-foreground">
           {viewMode === 'analytics' ? 'Analytics Overview' : 'Claims Data'}
         </h3>
 

@@ -37,12 +37,12 @@ export function ValueByRiskChart({ valueByRisk }: ValueByRiskChartProps) {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart data={data} layout="vertical" margin={{ left: 20, right: 20, top: 10, bottom: 10 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#27272a" horizontal={true} vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" horizontal={true} vertical={false} />
         <XAxis
           type="number"
           tickLine={false}
           axisLine={false}
-          stroke="#a1a1aa"
+          stroke="var(--color-muted-foreground)"
           fontSize={11}
           tickFormatter={(value) => formatCurrency(value)}
         />
@@ -51,36 +51,36 @@ export function ValueByRiskChart({ valueByRisk }: ValueByRiskChartProps) {
           dataKey="riskLevel"
           tickLine={false}
           axisLine={false}
-          stroke="#a1a1aa"
+          stroke="var(--color-muted-foreground)"
           fontSize={11}
           width={120}
         />
         <Tooltip
           contentStyle={{
-            backgroundColor: '#18181b',
-            border: '1px solid #27272a',
+            backgroundColor: 'var(--color-card)',
+            border: '1px solid var(--color-border)',
             borderRadius: '6px',
             fontSize: '12px',
           }}
-          labelStyle={{ color: '#fafafa', marginBottom: '4px' }}
-          itemStyle={{ color: '#a1a1aa' }}
+          labelStyle={{ color: 'var(--color-foreground)', marginBottom: '4px' }}
+          itemStyle={{ color: 'var(--color-muted-foreground)' }}
           formatter={(value: number) => formatCurrency(value)}
         />
         <Legend
           wrapperStyle={{
             fontSize: '12px',
-            color: '#a1a1aa',
+            color: 'var(--color-muted-foreground)',
           }}
         />
         <Bar
           dataKey="totalValue"
-          fill="rgba(59, 130, 246, 0.8)"
+          fill="var(--color-primary)"
           name="Total Value"
           radius={[0, 4, 4, 0]}
         />
         <Bar
           dataKey="avgValue"
-          fill="rgba(16, 185, 129, 0.8)"
+          fill="var(--color-success)"
           name="Avg Value"
           radius={[0, 4, 4, 0]}
         />

@@ -27,7 +27,7 @@ export function PriceDistributionHistogram({ priceDistribution }: PriceDistribut
   if (data.length === 0 || data.every(d => d.highRiskCount === 0 && d.lowRiskCount === 0)) {
     return (
       <div className="h-[300px] flex items-center justify-center">
-        <p className="text-sm text-zinc-500">No price data available</p>
+        <p className="text-sm text-muted-foreground">No price data available</p>
       </div>
     );
   }
@@ -35,12 +35,12 @@ export function PriceDistributionHistogram({ priceDistribution }: PriceDistribut
   return (
     <ResponsiveContainer width="100%" height={300}>
       <ComposedChart data={data} margin={{ left: 10, right: 20, top: 10, bottom: 30 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
         <XAxis
           dataKey="binLabel"
           tickLine={false}
           axisLine={false}
-          stroke="#a1a1aa"
+          stroke="var(--color-muted-foreground)"
           fontSize={10}
           angle={-45}
           textAnchor="end"
@@ -50,37 +50,37 @@ export function PriceDistributionHistogram({ priceDistribution }: PriceDistribut
           allowDecimals={false}
           tickLine={false}
           axisLine={false}
-          stroke="#a1a1aa"
+          stroke="var(--color-muted-foreground)"
           fontSize={11}
           label={{
             value: 'Count of Claims',
             angle: -90,
             position: 'insideLeft',
-            style: { fill: '#a1a1aa', fontSize: 11 },
+            style: { fill: 'var(--color-muted-foreground)', fontSize: 11 },
           }}
         />
         <Tooltip
           contentStyle={{
-            backgroundColor: '#18181b',
-            border: '1px solid #27272a',
+            backgroundColor: 'var(--color-card)',
+            border: '1px solid var(--color-border)',
             borderRadius: '6px',
             fontSize: '12px',
           }}
-          labelStyle={{ color: '#fafafa', marginBottom: '4px' }}
-          itemStyle={{ color: '#a1a1aa' }}
+          labelStyle={{ color: 'var(--color-foreground)', marginBottom: '4px' }}
+          itemStyle={{ color: 'var(--color-muted-foreground)' }}
         />
         <Legend
           wrapperStyle={{
             fontSize: '12px',
-            color: '#a1a1aa',
+            color: 'var(--color-muted-foreground)',
           }}
         />
         {/* Overlaid continuous histograms with transparency */}
         <Area
           type="monotone"
           dataKey="lowRiskCount"
-          stroke="#22c55e"
-          fill="#22c55e"
+          stroke="var(--color-success)"
+          fill="var(--color-success)"
           fillOpacity={0.4}
           strokeWidth={2}
           name="Low Risk (STP)"
@@ -88,8 +88,8 @@ export function PriceDistributionHistogram({ priceDistribution }: PriceDistribut
         <Area
           type="monotone"
           dataKey="highRiskCount"
-          stroke="#ef4444"
-          fill="#ef4444"
+          stroke="var(--color-destructive)"
+          fill="var(--color-destructive)"
           fillOpacity={0.4}
           strokeWidth={2}
           name="High Risk"

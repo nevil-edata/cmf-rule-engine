@@ -42,17 +42,17 @@ export function ClaimForm({ claim, onChange, features }: ClaimFormProps) {
       <section className="space-y-2">
         <h3
           className="text-[10px] font-semibold uppercase tracking-wider"
-          style={{ color: '#71717a' }}
+          style={{ color: 'var(--color-text-muted)' }}
         >
           Claim Identity
         </h3>
         <input
           type="text"
-          className="w-full h-8 px-3 rounded text-sm font-mono focus:outline-none focus:ring-1 focus:ring-zinc-600"
+          className="w-full h-8 px-3 rounded text-sm font-mono focus:outline-none focus:ring-1 focus:ring-input"
           style={{
-            backgroundColor: '#000000',
-            border: '1px solid #3f3f46',
-            color: '#fafafa',
+            backgroundColor: 'var(--color-card)',
+            border: '1px solid var(--color-input)',
+            color: 'var(--color-foreground)',
           }}
           placeholder="CLM-2024-001"
           value={claim['Claim number'] || ''}
@@ -65,7 +65,7 @@ export function ClaimForm({ claim, onChange, features }: ClaimFormProps) {
         <section className="space-y-3">
           <h3
             className="text-[10px] font-semibold uppercase tracking-wider"
-            style={{ color: '#71717a' }}
+            style={{ color: 'var(--color-text-muted)' }}
           >
             Boolean Features ({booleanFeatures.length})
           </h3>
@@ -73,15 +73,15 @@ export function ClaimForm({ claim, onChange, features }: ClaimFormProps) {
             {booleanFeatures.map((feature) => (
               <label
                 key={feature.name}
-                className="flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-zinc-800/50 transition-colors"
+                className="flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-muted/50 transition-colors"
               >
                 <input
                   type="checkbox"
-                  className="h-4 w-4 rounded border-zinc-700 bg-black accent-blue-500"
+                  className="h-4 w-4 rounded border-input bg-card accent-primary"
                   checked={!!claim[feature.name]}
                   onChange={(e) => handleCheckboxChange(feature.name, e.target.checked)}
                 />
-                <span className="text-sm truncate" style={{ color: '#a1a1aa' }}>
+                <span className="text-sm truncate" style={{ color: 'var(--color-muted-foreground)' }}>
                   {toLabel(feature.name)}
                 </span>
               </label>
@@ -95,7 +95,7 @@ export function ClaimForm({ claim, onChange, features }: ClaimFormProps) {
         <section className="space-y-3">
           <h3
             className="text-[10px] font-semibold uppercase tracking-wider"
-            style={{ color: '#71717a' }}
+            style={{ color: 'var(--color-text-muted)' }}
           >
             Numeric Features ({numericFeatures.length})
           </h3>
@@ -104,7 +104,7 @@ export function ClaimForm({ claim, onChange, features }: ClaimFormProps) {
               <div key={feature.name} className="space-y-1">
                 <label
                   className="text-xs truncate block"
-                  style={{ color: '#71717a' }}
+                  style={{ color: 'var(--color-text-muted)' }}
                   htmlFor={`field-${feature.name}`}
                   title={toLabel(feature.name)}
                 >
@@ -114,11 +114,11 @@ export function ClaimForm({ claim, onChange, features }: ClaimFormProps) {
                   id={`field-${feature.name}`}
                   type="number"
                   step="0.01"
-                  className="w-full h-8 px-3 rounded text-sm font-mono focus:outline-none focus:ring-1 focus:ring-zinc-600"
+                  className="w-full h-8 px-3 rounded text-sm font-mono focus:outline-none focus:ring-1 focus:ring-input"
                   style={{
-                    backgroundColor: '#000000',
-                    border: '1px solid #3f3f46',
-                    color: '#fafafa',
+                    backgroundColor: 'var(--color-card)',
+                    border: '1px solid var(--color-input)',
+                    color: 'var(--color-foreground)',
                   }}
                   value={claim[feature.name] !== undefined ? String(claim[feature.name]) : ''}
                   onChange={(e) => handleNumberChange(feature.name, e.target.value)}
@@ -132,7 +132,7 @@ export function ClaimForm({ claim, onChange, features }: ClaimFormProps) {
 
       {/* Empty state */}
       {sortedFeatures.length === 0 && (
-        <p className="text-sm" style={{ color: '#71717a' }}>
+        <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
           Select a tree to see available features.
         </p>
       )}

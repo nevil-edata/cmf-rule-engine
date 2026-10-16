@@ -21,26 +21,26 @@ export function useDatasetSort(datasets: DatasetWithStatus[]) {
     const sorted = [...datasets];
 
     sorted.sort((a, b) => {
-      let aVal: any;
-      let bVal: any;
-
       switch (sortConfig.column) {
-        case 'name':
-          aVal = a.nickname || a.fileName || '';
-          bVal = b.nickname || b.fileName || '';
+        case 'name': {
+          const aName = a.nickname || a.fileName || '';
+          const bName = b.nickname || b.fileName || '';
           return sortConfig.direction === 'asc'
-            ? aVal.localeCompare(bVal)
-            : bVal.localeCompare(aVal);
+            ? aName.localeCompare(bName)
+            : bName.localeCompare(aName);
+        }
 
-        case 'dimensions':
-          aVal = a.rows || 0;
-          bVal = b.rows || 0;
-          return sortConfig.direction === 'asc' ? aVal - bVal : bVal - aVal;
+        case 'dimensions': {
+          const aRows = a.rows || 0;
+          const bRows = b.rows || 0;
+          return sortConfig.direction === 'asc' ? aRows - bRows : bRows - aRows;
+        }
 
-        case 'uploaded':
-          aVal = new Date(a.uploadedAt || a.createdAt).getTime();
-          bVal = new Date(b.uploadedAt || b.createdAt).getTime();
-          return sortConfig.direction === 'asc' ? aVal - bVal : bVal - aVal;
+        case 'uploaded': {
+          const aTime = new Date(a.uploadedAt || a.createdAt).getTime();
+          const bTime = new Date(b.uploadedAt || b.createdAt).getTime();
+          return sortConfig.direction === 'asc' ? aTime - bTime : bTime - aTime;
+        }
 
         default:
           return 0;

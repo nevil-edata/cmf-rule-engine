@@ -31,11 +31,11 @@ export function CsvUploader({ onFileSelect, selectedFile, onClear, isProcessing 
           onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
           className="border-2 border-dashed rounded p-3 text-center transition-colors cursor-pointer"
-          style={{ borderColor: '#3f3f46' }}
+          style={{ borderColor: 'var(--color-input)' }}
           onClick={() => document.getElementById('csv-upload')?.click()}
         >
-          <Upload className="mx-auto h-6 w-6 text-zinc-500 mb-2" />
-          <p className="text-xs text-zinc-400 mb-2">
+          <Upload className="mx-auto h-6 w-6 text-muted-foreground mb-2" />
+          <p className="text-xs text-muted-foreground mb-2">
             Drop CSV or click to browse
           </p>
           <input
@@ -61,12 +61,12 @@ export function CsvUploader({ onFileSelect, selectedFile, onClear, isProcessing 
           </Button>
         </div>
       ) : (
-        <div className="flex items-center justify-between p-2 rounded border" style={{ borderColor: '#3f3f46', backgroundColor: '#27272a' }}>
+        <div className="flex items-center justify-between p-2 rounded border" style={{ borderColor: 'var(--color-input)', backgroundColor: 'var(--color-muted)' }}>
           <div className="flex items-center gap-2 flex-1 min-w-0">
-            <FileText className="h-4 w-4 text-blue-400 flex-shrink-0" />
+            <FileText className="h-4 w-4 text-info flex-shrink-0" />
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-medium text-zinc-100 truncate">{selectedFile.name}</p>
-              <p className="text-[10px] text-zinc-500">
+              <p className="text-xs font-medium text-foreground truncate">{selectedFile.name}</p>
+              <p className="text-[10px] text-muted-foreground">
                 {(selectedFile.size / 1024).toFixed(1)} KB
               </p>
             </div>
