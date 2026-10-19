@@ -15,7 +15,11 @@ export function EmptyState({ isAdmin = false }: EmptyStateProps) {
       illustration="car"
       eyebrow="Decision trees"
       title="No trees yet"
-      description="Create your first decision tree to explore real-time fraud detection analysis."
+      description={
+        isAdmin
+          ? "Create your first decision tree to explore real-time fraud detection analysis."
+          : "No decision trees have been set up for your company yet. Your eData contact adds them; rules and datasets work without one."
+      }
       action={
         isAdmin ? (
           <Button onClick={() => navigate('/generate-tree')} size="lg">
