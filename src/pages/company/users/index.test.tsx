@@ -11,7 +11,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -205,10 +205,9 @@ describe('T-M3-4.C.2.1 — Page renders user table', () => {
     renderPage();
 
     await waitFor(() => {
-      // At least one edit button, one toggle button, one recovery menu
+      // At least one edit button and one toggle button
       expect(screen.getAllByTitle(/edit user|cannot edit/i).length).toBeGreaterThan(0);
       expect(screen.getAllByTitle(/deactivate user|reactivate user|cannot deactivate/i).length).toBeGreaterThan(0);
-      expect(screen.getAllByTitle('Recovery options').length).toBeGreaterThan(0);
     });
   });
 });
@@ -421,78 +420,17 @@ describe('T-M3-4.C.5 — User Status Confirm Dialog', () => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// T-M3-4.C.6 — Recovery menu tests
+// T-M3-4.C.6 — Recovery menu is hidden (its edge functions are not deployed)
 // ─────────────────────────────────────────────────────────────────────────────
 
-describe('T-M3-4.C.6 — User Recovery Menu', () => {
-  it('resends invite successfully', async () => {
-    mockResendCompanyUserInvite.mockResolvedValue({ ok: true, data: undefined });
-
+describe('T-M3-4.C.6 — User Recovery Menu (hidden)', () => {
+  it('does not offer Resend Invite or Reset Access', async () => {
     renderPage();
 
     await waitFor(() => expect(screen.getByText('Bob User')).toBeInTheDocument());
 
-    // Open recovery menu on Bob's row
-    const recoveryButtons = screen.getAllByTitle('Recovery options');
-    fireEvent.click(recoveryButtons[1]); // Bob is second user in mockUsers
-
-    await waitFor(() => expect(screen.getByText('Resend Invite')).toBeInTheDocument());
-
-    await userEvent.click(screen.getByText('Resend Invite'));
-
-    await waitFor(() => expect(screen.getByText(/resend the invitation/i)).toBeInTheDocument());
-
-    await userEvent.click(screen.getByRole('button', { name: /^resend invite$/i }));
-
-    await waitFor(() => {
-      expect(mockResendCompanyUserInvite).toHaveBeenCalledWith('user-2');
-    });
-  });
-
-  it('resets access successfully', async () => {
-    mockResetCompanyUserAccess.mockResolvedValue({ ok: true, data: undefined });
-
-    renderPage();
-
-    await waitFor(() => expect(screen.getByText('Bob User')).toBeInTheDocument());
-
-    const recoveryButtons = screen.getAllByTitle('Recovery options');
-    fireEvent.click(recoveryButtons[1]);
-
-    await waitFor(() => expect(screen.getByText('Reset Access')).toBeInTheDocument());
-
-    await userEvent.click(screen.getByText('Reset Access'));
-
-    await waitFor(() => expect(screen.getByText(/revoke their current sessions/i)).toBeInTheDocument());
-
-    const resetAccessButtons = screen.getAllByRole('button', { name: /^reset access$/i });
-    await userEvent.click(resetAccessButtons[resetAccessButtons.length - 1]);
-
-    await waitFor(() => {
-      expect(mockResetCompanyUserAccess).toHaveBeenCalledWith('user-2');
-    });
-  });
-
-  it('surfaces error on resend invite failure', async () => {
-    mockResendCompanyUserInvite.mockResolvedValue({ ok: false, error: 'User not found' });
-
-    renderPage();
-
-    await waitFor(() => expect(screen.getByText('Bob User')).toBeInTheDocument());
-
-    const recoveryButtons = screen.getAllByTitle('Recovery options');
-    fireEvent.click(recoveryButtons[1]);
-
-    await waitFor(() => expect(screen.getByText('Resend Invite')).toBeInTheDocument());
-
-    await userEvent.click(screen.getByText('Resend Invite'));
-
-    await waitFor(() => expect(screen.getByText(/resend the invitation/i)).toBeInTheDocument());
-
-    await userEvent.click(screen.getByRole('button', { name: /^resend invite$/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText('User not found')).toBeInTheDocument();
-    });
+    expect(screen.queryByTitle('Recovery options')).not.toBeInTheDocument();
+    expect(screen.queryByText('Resend Invite')).not.toBeInTheDocument();
+    expect(screen.queryByText('Reset Access')).not.toBeInTheDocument();
   });
 });

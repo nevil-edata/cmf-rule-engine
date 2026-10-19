@@ -20,6 +20,13 @@ import { EditCompanyUserDialog } from './components/EditCompanyUserDialog';
 import { UserStatusConfirmDialog } from './components/UserStatusConfirmDialog';
 import { UserRecoveryMenu } from './components/UserRecoveryMenu';
 
+/**
+ * Resend Invite / Reset Access call the edge functions resend-user-invite and reset-user-access,
+ * which are not deployed (and not in the repo), so the menu is hidden until they exist.
+ * Set this to true again once they are built and deployed.
+ */
+const RECOVERY_MENU_ENABLED = false;
+
 export default function CompanyUsers() {
   const setBreadcrumbs = useSetAtom(headerBreadcrumbsAtom);
   const { profile } = useAuth();
@@ -214,12 +221,14 @@ export default function CompanyUsers() {
                           >
                             {user.isActive ? <UserX className="h-4 w-4" /> : <UserCheck className="h-4 w-4" />}
                           </Button>
-                          <UserRecoveryMenu
-                            userId={user.userId}
-                            userName={user.fullName ?? 'Unknown'}
-                            disabled={isAdminRow}
-                            onSuccess={refresh}
-                          />
+                          {RECOVERY_MENU_ENABLED && (
+                            <UserRecoveryMenu
+                              userId={user.userId}
+                              userName={user.fullName ?? 'Unknown'}
+                              disabled={isAdminRow}
+                              onSuccess={refresh}
+                            />
+                          )}
                         </div>
                       </td>
                     </tr>
