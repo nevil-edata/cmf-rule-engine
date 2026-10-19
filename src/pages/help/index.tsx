@@ -65,7 +65,7 @@ export default function Help() {
       <PageHeader
         eyebrow="Guide"
         title="Help & Guide"
-        description="How ClaimCPU works and how to find your way around it. The steps below are for the role you are signed in with."
+        description="How ClaimCPU works and how to find your way around it."
         illustration="grid"
       />
 
