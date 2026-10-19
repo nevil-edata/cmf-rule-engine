@@ -6,10 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Sun, Moon, ChevronRight } from 'lucide-react';
 
 const defaultRouteConfig: Record<string, { breadcrumbs: { label: string; href?: string }[] }> = {
+  '/home': { breadcrumbs: [{ label: 'Home' }] },
   '/review-trees': { breadcrumbs: [{ label: 'Home', href: '/' }, { label: 'Decision Trees' }] },
   '/datasets': { breadcrumbs: [{ label: 'Home', href: '/' }, { label: 'Datasets' }] },
   '/generate-tree': { breadcrumbs: [{ label: 'Home', href: '/' }, { label: 'Generate Tree' }] },
-  '/table-visualizer': { breadcrumbs: [{ label: 'Home', href: '/' }, { label: 'Table Visualizer' }] },
+  '/table-visualizer': { breadcrumbs: [{ label: 'Home', href: '/' }, { label: 'Score Claims' }] },
   '/help': { breadcrumbs: [{ label: 'Home', href: '/' }, { label: 'Help' }] },
 };
 

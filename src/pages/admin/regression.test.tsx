@@ -271,8 +271,8 @@ describe('M3-3.E.2 - Admin regression scenarios', () => {
         </RoleGuard>
       );
 
-      // client_admin landing path is /datasets
-      expect(mockNavigate).toHaveBeenCalledWith('/datasets');
+      // client_admin landing path is /home
+      expect(mockNavigate).toHaveBeenCalledWith('/home');
       expect(screen.queryByText('Admin Content')).toBeNull();
     });
 
@@ -294,7 +294,7 @@ describe('M3-3.E.2 - Admin regression scenarios', () => {
         </RoleGuard>
       );
 
-      expect(mockNavigate).toHaveBeenCalledWith('/datasets');
+      expect(mockNavigate).toHaveBeenCalledWith('/home');
       expect(screen.queryByText('Admin Content')).toBeNull();
     });
 

@@ -41,7 +41,7 @@ describe('Help page', () => {
   it('only lists the pages and tasks a Client User can use', () => {
     renderHelp();
     const pages = screen.getByRole('heading', { level: 2, name: 'What each page is for' }).closest('section')!;
-    expect(within(pages).getByText('Table Visualizer')).toBeInTheDocument();
+    expect(within(pages).getByText('Score Claims')).toBeInTheDocument();
     expect(within(pages).queryByText('Company Users')).not.toBeInTheDocument();
 
     expect(screen.getByText('Score a file of claims')).toBeInTheDocument();
@@ -84,7 +84,8 @@ describe('Help page', () => {
   it('links each page entry to a real route', () => {
     currentRole = 'admin';
     renderHelp();
-    const link = screen.getByRole('link', { name: /Table Visualizer/ });
+    const pages = screen.getByRole('heading', { level: 2, name: 'What each page is for' }).closest('section')!;
+    const link = within(pages).getByRole('link', { name: /^Score Claims/ });
     expect(link).toHaveAttribute('href', '/table-visualizer');
   });
 });

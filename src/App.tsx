@@ -23,6 +23,7 @@ const AdminLogs = lazy(() => import('@/pages/admin/logs'));
 const CompanyOverview = lazy(() => import('@/pages/company'));
 const CompanyUsers = lazy(() => import('@/pages/company/users'));
 const Help = lazy(() => import('@/pages/help'));
+const Home = lazy(() => import('@/pages/home'));
 
 const allRoles: UserRole[] = ['admin', 'client_admin', 'client_user'];
 
@@ -58,6 +59,17 @@ function App() {
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/auth/admin" element={<AdminAuthPage />} />
               <Route path="/" element={<RoleLandingRedirect />} />
+
+              <Route
+                path="/home"
+                element={
+                  <RoleGuard allowedRoles={allRoles}>
+                    <AppLayout>
+                      <Home />
+                    </AppLayout>
+                  </RoleGuard>
+                }
+              />
 
               <Route
                 path="/review-trees"

@@ -15,6 +15,7 @@ import {
   Users,
   ScrollText,
   CircleHelp,
+  House,
 } from 'lucide-react';
 import { useAuth, type UserRole } from '@/lib/auth/context';
 import { sidebarCollapsedAtom } from '@/store/atoms/ui';
@@ -26,14 +27,24 @@ interface NavItem {
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   roles: UserRole[];
+  /** Position in the usual order of work (shown as a small number next to the label) */
+  step?: number;
 }
 
-const mainNavItems: NavItem[] = [
+const homeNavItems: NavItem[] = [
+  { path: '/home', label: 'Home', icon: House, roles: ['admin', 'client_admin', 'client_user'] },
+];
+
+// Order of work: load data, score it, then optionally add rules. Trees are what the scoring uses.
+const workflowNavItems: NavItem[] = [
+  { path: '/datasets', label: 'Datasets', icon: FileText, roles: ['admin', 'client_admin', 'client_user'], step: 1 },
+  { path: '/table-visualizer', label: 'Score Claims', icon: Table, roles: ['admin', 'client_admin', 'client_user'], step: 2 },
+  { path: '/rules', label: 'Rules', icon: ListChecks, roles: ['admin', 'client_admin', 'client_user'], step: 3 },
+];
+
+const treeNavItems: NavItem[] = [
   { path: '/review-trees', label: 'Decision Trees', icon: LayoutDashboard, roles: ['admin', 'client_admin', 'client_user'] },
-  { path: '/datasets', label: 'Datasets', icon: FileText, roles: ['admin', 'client_admin', 'client_user'] },
   { path: '/generate-tree', label: 'Generate Tree', icon: PlusCircle, roles: ['admin'] },
-  { path: '/table-visualizer', label: 'Table Visualizer', icon: Table, roles: ['admin', 'client_admin', 'client_user'] },
-  { path: '/rules', label: 'Rules', icon: ListChecks, roles: ['admin', 'client_admin', 'client_user'] },
 ];
 
 const adminNavItems: NavItem[] = [
@@ -74,12 +85,20 @@ export function Sidebar() {
 
   const role = profile?.role;
 
-  const visibleMainItems = useMemo(() => {
+  const visibleWorkflowItems = useMemo(() => {
     if (!role) {
       return [];
     }
 
-    return mainNavItems.filter((item) => item.roles.includes(role));
+    return workflowNavItems.filter((item) => item.roles.includes(role));
+  }, [role]);
+
+  const visibleTreeItems = useMemo(() => {
+    if (!role) {
+      return [];
+    }
+
+    return treeNavItems.filter((item) => item.roles.includes(role));
   }, [role]);
 
   const visibleAdminItems = useMemo(() => {
@@ -194,6 +213,14 @@ export function Sidebar() {
                 )}
                 <item.icon className={cn('h-4 w-4 flex-shrink-0', active && 'text-teal-200')} />
                 {!isCollapsed && <span className="truncate">{item.label}</span>}
+                {!isCollapsed && item.step && (
+                  <span
+                    aria-hidden="true"
+                    className="ml-auto flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border border-sidebar-border text-[11px] font-semibold text-teal-200/80"
+                  >
+                    {item.step}
+                  </span>
+                )}
               </Button>
             </Link>
           );
@@ -245,7 +272,9 @@ export function Sidebar() {
 
       <div className="relative flex-1 overflow-y-auto py-6">
         <nav className="relative space-y-5 px-4">
-          {renderNavSection(visibleMainItems)}
+          {renderNavSection(homeNavItems.filter((item) => role && item.roles.includes(role)))}
+          {renderNavSection(visibleWorkflowItems, 'Workflow')}
+          {renderNavSection(visibleTreeItems, 'Trees')}
           {renderNavSection(visibleAdminItems, 'Admin')}
           {renderNavSection(visibleCompanyItems, 'My Company')}
           {renderNavSection(visibleHelpItems, 'Support')}

@@ -16,21 +16,14 @@ const everyone: UserRole[] = ['admin', 'client_admin', 'client_user'];
 
 export const pageGuides: PageGuide[] = [
   {
-    name: 'Decision Trees',
-    path: '/review-trees',
-    roles: everyone,
-    summary:
-      'The list of scoring trees for your company. Search by name, then open one with Visualize (run claims through it and see the path) or Struct (see the tree\'s structure).',
-  },
-  {
     name: 'Datasets',
     path: '/datasets',
     roles: everyone,
     summary:
-      'The claim files uploaded for your company. Open a dataset for its Overview, Data Grid and Schema Map (how its columns were matched). Admins and Client Admins can upload and delete.',
+      'The claim files uploaded for your company. Open a dataset for its Overview, Data Grid and Schema Map (how its columns were matched). Linking a tree to a dataset is optional and not needed to score. Admins and Client Admins can upload and delete.',
   },
   {
-    name: 'Table Visualizer',
+    name: 'Score Claims',
     path: '/table-visualizer',
     roles: everyone,
     summary:
@@ -42,6 +35,13 @@ export const pageGuides: PageGuide[] = [
     roles: everyone,
     summary:
       'One set of rules per dataset, written as plain sentences such as "Total Loss equals Yes". Each rule marks matching claims as Moderate or High. Admins and Client Admins can create and edit them.',
+  },
+  {
+    name: 'Decision Trees',
+    path: '/review-trees',
+    roles: everyone,
+    summary:
+      'The scoring trees you can use (the model behind a score; you pick one in Score Claims). Search by name, then open one with Visualize (run claims through it and see the path) or View Structure (see the tree drawn).',
   },
   {
     name: 'Company Overview',
@@ -69,11 +69,11 @@ export const taskGuides: TaskGuide[] = [
     title: 'Score a file of claims',
     roles: everyone,
     steps: [
-      'Open Table Visualizer from the left menu. Leave the mode on Trees.',
-      'Under Decision Tree Model, choose the tree to use. Click the box and start typing the name to find it quickly.',
-      'Under Data Source, either use the Upload tab to drop in a CSV, or the Dataset tab to pick a file already uploaded for your company and press Load Dataset.',
-      'Under Validation Status, choose the Claim Number Column (the column that holds each claim\'s ID). The status turns to Ready when all the columns the tree needs are present. If it lists missing columns, the file does not match the tree.',
-      'Press Evaluate with Trees. The table fills with results.',
+      'Open Score Claims from the left menu. Leave the mode on Trees.',
+      'Step 1, Decision Tree Model: choose the tree to use. Click the box and start typing the name to find it quickly.',
+      'Step 2, Data Source: either use the Upload tab to drop in a CSV, or the Dataset tab to pick a file already uploaded for your company and press Load Dataset.',
+      'Step 3, Check the File: choose the Claim Number Column (the column that holds each claim\'s ID). The status turns to Ready when all the columns the tree needs are present. If it lists missing columns, the file does not match the tree.',
+      'Step 4: press Evaluate with Trees. If it is greyed out, the line under the button says which step is missing. The table fills with results.',
       'Use the STP, Moderate and High Risk buttons above the table to filter, and the search box on the left to find a claim number.',
       'Click any claim to open its decision trace: the path it took through each tree and how its score was made up.',
       'Press Export Results to save the scored claims as a file.',
@@ -97,7 +97,7 @@ export const taskGuides: TaskGuide[] = [
       'Pick a field from the Fields panel, or type in the box at the bottom, for example: Total Loss equals Yes. Press Enter to add the rule.',
       'Choose the risk effect for the rule, Moderate or High, before you add it.',
       'Your changes are saved automatically (the top bar says Auto-saved).',
-      'To use the rules, open Table Visualizer, switch the mode to Rules, choose the dataset and evaluate. Claims that match a rule are flagged with its effect.',
+      'To use the rules, open Score Claims, switch the mode to Rules, choose the dataset and evaluate. Claims that match a rule are flagged with its effect.',
     ],
   },
   {
@@ -144,14 +144,14 @@ export const tips: string[] = [
   'Search boxes suggest real names as you type. Pick a suggestion to fill it in exactly, or just keep typing to search.',
   'The sun and moon button at the top right switches between light and dark.',
   'The arrow at the top of the left menu collapses it to icons when you need more room.',
-  'In Table Visualizer, switch to Analytics view for a summary of how the claims are spread across the three lanes.',
+  'In Score Claims, switch to Analytics view for a summary of how the claims are spread across the three lanes.',
 ];
 
 export const troubleshooting: { problem: string; answer: string }[] = [
   {
     problem: 'The Evaluate button is greyed out',
     answer:
-      'You need all three: a tree (or a dataset with rules in Rules mode), loaded data, and a claim number column chosen under Validation Status.',
+      'You need all three: a tree (or a dataset with rules in Rules mode), loaded data, and a claim number column chosen in Step 3. The line under the button names the first thing missing.',
   },
   {
     problem: 'Validation lists missing columns',

@@ -4,6 +4,7 @@ import { useSetAtom } from 'jotai';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import { PageHeader } from '@/components/shared/Layout/PageHeader';
 import { Card } from '@/components/ui/card';
+import { WorkflowSteps } from '@/components/shared/WorkflowSteps';
 import { useAuth, type UserRole } from '@/lib/auth/context';
 import { headerBreadcrumbsAtom } from '@/store/atoms/header';
 import {
@@ -101,6 +102,8 @@ export default function Help() {
                 where to look first; it does not say a claim is fraudulent.
               </p>
             </Card>
+            <p className="pt-2 text-sm font-medium text-foreground">The usual order of work</p>
+            <WorkflowSteps canWrite={role !== 'client_user'} />
           </section>
 
           {/* Pages */}

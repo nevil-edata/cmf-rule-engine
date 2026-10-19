@@ -291,9 +291,9 @@ describe('T-M3-4.0.3.2 — CompanyOverview placeholder', () => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 describe('Sidebar companyNavItems includes /company for client_admin only', () => {
-  it('getRoleLandingPath returns /admin for admin and /datasets for other roles', () => {
-    expect(getRoleLandingPath('admin')).toBe('/admin');
-    expect(getRoleLandingPath('client_admin')).toBe('/datasets');
-    expect(getRoleLandingPath('client_user')).toBe('/datasets');
+  it('getRoleLandingPath returns /home for every role', () => {
+    expect(getRoleLandingPath('admin')).toBe('/home');
+    expect(getRoleLandingPath('client_admin')).toBe('/home');
+    expect(getRoleLandingPath('client_user')).toBe('/home');
   });
 });

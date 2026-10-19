@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelGroupHandle } from 'react-resizable-panels';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Sidebar } from './components/Sidebar';
 import { TopPane } from './components/TopPane';
 import { TraceInspector } from './components/TraceInspector';
@@ -151,8 +153,11 @@ export default function TableVisualizer() {
     }
   }, [analysisMode, claims, loadedRules.length, setValidation, setClaimsWithResults, validation?.claimNumberColumn]);
 
+  // Switching modes clears the file, tree and results, so ask first when there is something to lose
+  const [pendingMode, setPendingMode] = useState<AnalysisMode | null>(null);
+
   // Clear ALL data when switching modes
-  const handleAnalysisModeChange = useCallback((mode: AnalysisMode) => {
+  const applyAnalysisMode = useCallback((mode: AnalysisMode) => {
     if (mode !== analysisMode) {
       // Clear everything - file, results, validation, rules
       setSelectedFile(null);
@@ -168,6 +173,15 @@ export default function TableVisualizer() {
     }
     setAnalysisMode(mode);
   }, [analysisMode, setAnalysisMode, setClaimsWithResults, setSelectedClaimIndex, setFileMetadata, setValidation, setCurrentDatasetId, setSelectedTreeId, clearParse, clearMetrics]);
+
+  const handleAnalysisModeChange = useCallback((mode: AnalysisMode) => {
+    const hasWork = Boolean(fileMetadata) || claimsWithResults.length > 0 || selectedTreeId !== null;
+    if (mode !== analysisMode && hasWork) {
+      setPendingMode(mode);
+      return;
+    }
+    applyAnalysisMode(mode);
+  }, [analysisMode, fileMetadata, claimsWithResults.length, selectedTreeId, applyAnalysisMode]);
 
   // Tree mode handlers
   const handleTreeSelect = (treeId: string) => {
@@ -333,6 +347,30 @@ export default function TableVisualizer() {
           <p className="text-sm text-destructive">{error}</p>
         </div>
       )}
+
+      <Dialog open={pendingMode !== null} onOpenChange={(open) => { if (!open) setPendingMode(null); }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Switch to {pendingMode === 'rules' ? 'Rules' : 'Trees'}?</DialogTitle>
+            <DialogClose />
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            Trees and Rules score claims separately. Switching clears the loaded file, the chosen tree and the results
+            on screen. Nothing saved is deleted.
+          </p>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setPendingMode(null)}>Stay here</Button>
+            <Button
+              onClick={() => {
+                if (pendingMode) applyAnalysisMode(pendingMode);
+                setPendingMode(null);
+              }}
+            >
+              Switch and clear
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden w-full">

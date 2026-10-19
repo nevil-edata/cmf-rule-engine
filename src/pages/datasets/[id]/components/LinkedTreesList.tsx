@@ -50,7 +50,12 @@ export default function LinkedTreesList({
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>Linked Decision Trees</CardTitle>
+          <div>
+            <CardTitle>Linked Decision Trees <span className="ml-1 text-xs font-normal text-muted-foreground">(optional)</span></CardTitle>
+            <p className="mt-1 text-sm text-muted-foreground">
+              A note of which trees you use with this dataset. You do not need it to score: pick the tree on the Score Claims page.
+            </p>
+          </div>
           {canWrite && (
             <div className="flex gap-2">
               <Button size="sm" variant="outline" onClick={() => setShowLinkDialog(true)}>
@@ -75,14 +80,19 @@ export default function LinkedTreesList({
         ) : associations.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-sm text-muted-foreground mb-4">
-              No trees have been evaluated with this dataset yet
+              No trees linked yet. Ready to use this dataset?
             </p>
-            {isAdmin && (
-              <Button variant="outline" onClick={handleCreateTree}>
-                <Plus className="mr-2 h-4 w-4" />
-                Create Your First Tree
-              </Button>
-            )}
+            <div className="flex justify-center gap-2">
+              <Link to="/table-visualizer">
+                <Button>Score this dataset</Button>
+              </Link>
+              {isAdmin && (
+                <Button variant="outline" onClick={handleCreateTree}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create a Tree
+                </Button>
+              )}
+            </div>
           </div>
         ) : (
           <div className="space-y-2">

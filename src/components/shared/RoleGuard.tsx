@@ -8,8 +8,9 @@ interface RoleGuardProps {
   allowedRoles?: UserRole[];
 }
 
-export function getRoleLandingPath(role: UserRole) {
-  return role === 'admin' ? '/admin' : '/datasets';
+export function getRoleLandingPath(_role: UserRole) {
+  // Everyone starts on Home; it shows the next step for their role
+  return '/home';
 }
 
 export function RoleGuard({ children, allowedRoles }: RoleGuardProps) {

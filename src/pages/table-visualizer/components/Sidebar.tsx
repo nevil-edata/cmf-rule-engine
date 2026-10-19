@@ -86,9 +86,27 @@ export function Sidebar(props: SidebarProps) {
 
   const [dataSourceTab, setDataSourceTab] = useState('upload');
 
+  // Why Evaluate is not available yet, in the order the steps are done
+  const hasData = Boolean(fileMetadata && fileMetadata.name);
+  let evaluateBlocker: string | null = null;
+  if (analysisMode === 'trees' && !selectedTreeId) {
+    evaluateBlocker = 'Step 1: choose a decision tree';
+  } else if (!hasData) {
+    evaluateBlocker = analysisMode === 'trees' ? 'Step 2: upload a CSV or load a dataset' : 'Step 1: load a dataset that has rules';
+  } else if (!validation) {
+    evaluateBlocker = 'Reading the file...';
+  } else if (analysisMode === 'trees' && validation.missingColumns.length > 0) {
+    evaluateBlocker = 'Step 3: the file is missing columns this tree needs';
+  } else if (analysisMode === 'trees' && !validation.claimNumberColumn) {
+    evaluateBlocker = 'Step 3: pick the claim number column';
+  } else if (analysisMode === 'rules' && !ruleCount) {
+    evaluateBlocker = 'This dataset has no rules yet. Add some on the Rules page';
+  }
+  const stepNumber = (n: number) => (analysisMode === 'trees' ? n : n - 1);
+
   return (
     <aside
-      className="w-[10%] min-w-[280px] max-w-[400px] flex-shrink-0 border-r flex flex-col overflow-hidden"
+      className="w-[10%] min-w-[280px] max-w-[400px] flex-shrink-0 border-r flex flex-col overflow-y-auto"
       style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-card)' }}
     >
       {/* Section 0: Analysis Mode Selector */}
@@ -107,7 +125,7 @@ export function Sidebar(props: SidebarProps) {
       {analysisMode === 'trees' && (
         <div className="border-b p-4" style={{ borderBottomWidth: '1px', borderColor: 'var(--color-border)' }}>
           <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2 block">
-            Decision Tree Model
+            Step {stepNumber(1)} - Decision Tree Model
           </Label>
           <SearchableSelect
             aria-label="Decision tree model"
@@ -135,7 +153,7 @@ export function Sidebar(props: SidebarProps) {
       {/* Section 2: Data Source */}
       <div className="border-b p-4" style={{ borderBottomWidth: '1px', borderColor: 'var(--color-border)' }}>
         <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2 block">
-          Data Source
+          Step {stepNumber(2)} - Data Source
         </Label>
 
         {fileMetadata && fileMetadata.name ? (
@@ -192,28 +210,17 @@ export function Sidebar(props: SidebarProps) {
         )}
       </div>
 
-      {/* Section 3: Search & Filter */}
+      {/* Section 3: Validation Status */}
       <div className="border-b p-4" style={{ borderBottomWidth: '1px', borderColor: 'var(--color-border)' }}>
-        <SearchBar
-          value={searchQuery}
-          onChange={onSearchChange}
-          placeholder="Search by claim number..."
-          claimNumberColumn={validation?.claimNumberColumn || null}
-          suggestions={claimNumbers}
-        />
-      </div>
-
-      {/* Section 4: Validation Status */}
-      <div className="border-b p-4 flex-1 overflow-y-auto" style={{ borderBottomWidth: '1px', borderColor: 'var(--color-border)' }}>
         <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-3 block">
-          Validation Status
+          Step {stepNumber(3)} - Check the File
         </Label>
 
         {!validation ? (
           <p className="text-xs text-muted-foreground">
             {analysisMode === 'trees' && fileMetadata && !selectedTreeId
               ? 'Select a decision tree to check this file’s columns'
-              : 'Upload data to validate columns'}
+              : 'Load data to check its columns'}
           </p>
         ) : (
           <div className="space-y-3">
@@ -257,8 +264,11 @@ export function Sidebar(props: SidebarProps) {
         )}
       </div>
 
-      {/* Section 5: Actions (Sticky Bottom) */}
+      {/* Section 4: Actions (Sticky Bottom) */}
       <div className="mt-auto p-4 border-t" style={{ borderTopWidth: '1px', borderColor: 'var(--color-border)' }}>
+        <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2 block">
+          Step {stepNumber(4)} - Evaluate
+        </Label>
         <Button
           onClick={onProcess}
           disabled={!validation?.isValid || isProcessing || (analysisMode === 'rules' && !ruleCount)}
@@ -273,6 +283,23 @@ export function Sidebar(props: SidebarProps) {
             analysisMode === 'trees' ? 'Evaluate with Trees' : 'Evaluate with Rules'
           )}
         </Button>
+
+        {evaluateBlocker && !isProcessing && (
+          <p className="mb-3 text-xs text-muted-foreground" data-testid="evaluate-blocker">
+            {evaluateBlocker}
+          </p>
+        )}
+
+        {/* Find a claim once results are on screen */}
+        <div className="mb-3">
+          <SearchBar
+            value={searchQuery}
+            onChange={onSearchChange}
+            placeholder="Search by claim number..."
+            claimNumberColumn={validation?.claimNumberColumn || null}
+            suggestions={claimNumbers}
+          />
+        </div>
 
         <Button
           onClick={onExport}
