@@ -35,6 +35,26 @@ export interface CompanyOverviewState {
   activities: ActivityLog[];
 }
 
+/**
+ * Names of the people behind activity entries. Best effort: people outside the company (such as an
+ * Admin) may not be readable, and a failed lookup only means the name is left out.
+ */
+async function lookupUserNames(userIds: unknown[]): Promise<Map<string, string>> {
+  const names = new Map<string, string>();
+  const ids = [...new Set(userIds.filter((id): id is string => typeof id === 'string'))];
+  if (ids.length === 0) return names;
+
+  try {
+    const { data } = await supabase.from('user_profiles').select('user_id, full_name').in('user_id', ids);
+    for (const row of data ?? []) {
+      if (row.full_name) names.set(row.user_id, row.full_name);
+    }
+  } catch {
+    // names are optional
+  }
+  return names;
+}
+
 export function useCompanyOverview() {
   const { profile } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -70,7 +90,7 @@ export function useCompanyOverview() {
           target_id,
           details,
           created_at,
-          user_profiles (full_name)
+          user_id
         `).eq('details->>company_id', companyId).order('created_at', { ascending: false }).limit(10),
       ]);
 
@@ -119,16 +139,16 @@ export function useCompanyOverview() {
       if (logsRes.error) {
         hasFetchError = true;
       } else if (logsRes.data) {
-        updatedState.activities = (logsRes.data as SupabaseRow[]).map((log) => ({
+        const logRows = logsRes.data as SupabaseRow[];
+        const names = await lookupUserNames(logRows.map((log) => log.user_id));
+        updatedState.activities = logRows.map((log) => ({
           id: String(log.id),
           action: String(log.action),
           targetType: log.target_type ? String(log.target_type) : null,
           targetId: log.target_id ? String(log.target_id) : null,
           details: log.details as SupabaseRow | null,
           createdAt: String(log.created_at),
-          userName: log.user_profiles && typeof log.user_profiles === 'object' && 'full_name' in log.user_profiles
-            ? String(log.user_profiles.full_name)
-            : null,
+          userName: (log.user_id ? names.get(String(log.user_id)) : undefined) ?? null,
         }));
       }
 
